@@ -1,5 +1,6 @@
 <script setup>
 import { ref } from "vue"
+import { falseLoginTip } from "./FalseLoginTip.vue"
 
 const emit = defineEmits(["login-status-changed", ""])
 
@@ -20,15 +21,30 @@ function loginTry() {
 
 <template>
     <div id="loginPage">
-        <from>
-            <el-input v-model="account" placeholder="Account" maxlength="10"/>
-            <el-input v-model="password" type="password" placeholder="Password" show-password maxlength="15"/>
-            <button @click="loginTry"></button>
+        <from id="from">
+            <el-input class="inputArea" v-model="account" placeholder="Account" maxlength="10"/>
+            <el-input class="inputArea" v-model="password" type="password" placeholder="Password" show-password maxlength="15"/>
+            <button id="loginButton" @click="loginTry"> Login </button>
         </from>
-        <p v-if="tryStatus">{{ falseLoginTip }}</p>
+        <falseLoginTip v-if="tryStatus" @Warn-done="tryStatus = true">{{ falseLoginTip }}</falseLoginTip>
     </div>
 </template>
 
 <style>
-
+    #from{
+        width: 80%;
+        height: 40%;
+        margin: auto;
+    }
+    .inputArea{
+        width:60%;
+        height: 10px;
+        margin: 10px;
+    }
+    #loginButton{
+        width: 10px;
+        height: 5px;
+        color: brown;
+        background-color: beige;
+    }
 </style>

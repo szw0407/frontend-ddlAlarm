@@ -7,4 +7,9 @@ defineEmits(["login-status-changed"])
     </p>
 </template>
 
-<style></style>
+<style>
+    p{
+        color: black;
+        margin: 10px;
+    }
+</style>
