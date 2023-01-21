@@ -1,5 +1,5 @@
 <script setup>
-    defineEmits(["Warn-done"])   // 警告完成后抛出事件提醒父组件
+    defineEmits(["warn-done"])   // 警告完成后抛出事件提醒父组件
 </script>
 
 <template>
