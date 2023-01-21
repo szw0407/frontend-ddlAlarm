@@ -2,39 +2,56 @@
 import { ref } from "vue"
 import { ddlItems } from "./DDLItem.vue"
 import { ddlSettingPages } from "./DDLSettingPages.vue"
-import { HintTip } from "./HintTip.vue"
+import { ElMessageBox } from 'element-plus'
 import { ElLoading } from 'element-plus'
 
-defineEmits(["login-status-changed"])
+const emit = defineEmits(["login-status-changed"])
 
-const loadStatus = ref(false)   // 加载状态，用于加载组件切换
-const warnStatus = ref(false)   // 提示状态，用于提示组件切换
-const MsgNumber = ref(0)
-const TipMsgArray = ref([" 是否确认登出？ ", "正在获取ddl信息......", "获取QQ聊天数据失败，请重试。"])   // 提示语句设置
-const WarnMsg = ref("")
+const refreshStatus = ref(true)   // 刷新（即数据获取）状态，默认登录后进行一次数据获取
+const TipMsg = ref([" 是否确认登出？ ", "正在获取ddl信息......", "获取QQ聊天数据失败，请重试。"])   // 提示语句设置
 
-function getDDLMsg(){
-    const loading = ElLoading.service({ fullscreen : true, text : TipMsg[1] })
-    if(getFromBackend()){
+function refresh() {
+    const loading = ElLoading.service({ fullscreen: true, text: TipMsg[1] })
+    if (getMsg()) {
         loading.close()
     }
     else {
         loading.close()
-        WarnMsg.value = TipMsgArray[2]
-        warnStatus.value = true
+        ElMessageBox.confirm(
+            TipMsg[2],
+            "数据获取失败",
+            {
+                confirmButtonText: '再次获取',
+                cancelButtonText: '取消',
+                type: 'warning',
+            }
+        )
+            .then(refresh())
     }
+}
+function signout() {
+
+    ElMessageBox.confirm(
+        TipMsg[1],
+        "登出确定",
+        {
+            confirmButtonText: '确定登出',
+            cancelButtonText: '取消',
+            type: 'warning',
+        }
+    )
+        .then(emit("login-status-changed"))
 }
 </script>
 
 <template>
-    <HintTip v-if="warnStatus" @warn-done="tryStatus = true">{{ WarnMsg }}</HintTip>  <!-- 警告组件 -->
 
     <div></div>
 </template>
 
 <style>
-    p{
-        color: black;
-        margin: 10px;
-    }
+p {
+    color: black;
+    margin: 10px;
+}
 </style>
