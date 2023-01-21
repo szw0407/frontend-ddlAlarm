@@ -3,7 +3,7 @@ import { ref } from "vue"
 import { loginPage } from "./components/LoginPage.vue"
 import { workPage } from "./components/WorkPage.vue"
 
-const loginStatus = ref("0")  // 通过登录状态切换页面组件
+const loginStatus = ref(0)  // 通过登录状态切换页面组件
 const showPages = ref([loginPage, workPage])
 </script>
 
