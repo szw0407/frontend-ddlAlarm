@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from "vue"
+import { ref, component } from "vue"
 import { loginPage } from "./components/LoginPage.vue"
 import { workPage } from "./components/WorkPage.vue"
 
