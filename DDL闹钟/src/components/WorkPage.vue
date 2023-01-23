@@ -1,23 +1,26 @@
 <script setup>
-import { pushScopeId, ref } from "vue"
-import { ddlItems } from "./DDLItem.vue"
-import { ddlSettingPages } from "./DDLSettingPages.vue"
+import {  ref } from "vue"
 import { ElMessageBox } from 'element-plus'
 import { ElLoading } from 'element-plus'
+import { MyCalendar } from "./MyCalendar.vue"
 
 const emit = defineEmits(["login-status-changed"])
+
+const TipMsg = ref([" 是否确认登出？ ", "正在获取最新ddl信息......", "获取QQ聊天数据失败，请重试。",
+                     "正在提交DDL修改数据......", "DDL信息修改成功！", "确认要删除吗？", "正在删除......"])   // 提示语句设置
 
 const refreshStatus = ref(true)   // 刷新（即数据获取）状态，默认登录后进行一次数据获取
 const showWindowVisible = ref(false)
 const editWindowVisible = ref(false)
-const TipMsg = ref([" 是否确认登出？ ", "正在获取最新ddl信息......", "获取QQ聊天数据失败，请重试。", "正在提交DDL修改数据......", "DDL信息修改成功！", "确认要删除吗？", "正在删除......"])   // 提示语句设置
+
 const tableData = ref([])
 const showWindowData = ref({})
 const editWindowData = ref({})
 const inputEditData = ref({})
+
 const rank2Class = ref({ "非常紧急": "red", "紧急": "yellow", "不紧急": "green" })
-const showWindowArary = ref({ "ddlContent": "DDL内容", "date": "DDL截止日期", "group": "DDL发布群聊", "rank": "紧急等级", "src": "原始信息" })
-const tableArary = ref({ "ddlContent": "DDL内容", "date": "DDL截止日期", "group": "DDL发布群聊", "rank": "紧急等级", "src": "原始信息" })
+const tableArary = ref({ "ddlContent": "DDL内容", "date": "DDL截止日期", "group": "DDL发布群聊",
+                         "rank": "紧急等级", "src": "原始信息" })
 
 function refresh() {
     const loading = ElLoading.service({ fullscreen: true, text: TipMsg.value[1] })
@@ -98,17 +101,17 @@ function deleteItem(index) {
             }
         )
 }
-function returnCalendarCellClass(){
 
+if (refreshStatus) {
+    refresh()
 }
-
-
 </script>
 
 <template>
     <div>
 
         <!-- 纵览 -->
+        <MyCalendar />
         <!-- DDL展示表格 -->
         <el-table :data="tableData" :border="true" style="width: 100%" :row-class-name="tableRowClassName">
             <el-table-column label="截止时间" width="180">
