@@ -1,17 +1,20 @@
 <script setup>
-    import { ref } from "vue"
-    import { cellWidth } from "./MyCalendar.vue"
+    import { ref,computed } from "vue"
+    import { cellWidth,openCell } from "./MyCalendar.vue"
 
     defineProps(["day"])
 
-    const showStatus = ref(false)
     const cell = ref(null)
+    const thisCellStatus = computed(()=>{
+        return openCell.value === day
+    })
+
     function clickEvent(cellWidth, number){
-        if (!showStatus){
-            showStatus = !showStatus
+        if (!thisCellStatus.value){
+            openCell.value = day
             cell.value.width = (cellWidth.value-"px")*(7-number) + "" + "px"
         }else{
-            showStatus = !showStatus
+            openCell.value = null
             cell.value.width = cellWidth.value
         }
     }
@@ -21,7 +24,7 @@
     <div>
         <div :class="day.color" ref="cell" >
             <p @click="clickEvent" class="cellContent"> {{ day.day }} </p>
-            <div v-if="showStatus" class="ddlShow">
+            <div v-if="thisCellStatus" class="ddlShow">
                 <div class="ddlContent"></div>
             </div>
         </div>

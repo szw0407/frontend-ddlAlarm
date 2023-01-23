@@ -12,6 +12,7 @@ class day {
 }
 
 const cellWidth = ref("10px")
+const openCell = ref(null)
 </script>
 
 <template>
