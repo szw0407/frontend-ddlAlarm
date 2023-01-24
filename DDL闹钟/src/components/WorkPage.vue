@@ -4,6 +4,7 @@ import { ElMessageBox } from 'element-plus'
 import { ElLoading } from 'element-plus'
 import { MyCalendar } from "./MyCalendar.vue"
 import { DDLOperations } from "./DDLOperations.vue"
+import { MyAvatar } from "./MyAvatar.vue"
 
 const emit = defineEmits(["login-status-changed"])
 
@@ -65,6 +66,8 @@ if (refreshStatus.value) {
 <template>
     <div>
 
+        <!-- 头像 -->
+        <MyAvatar @signOut="signout" />
         <!-- 纵览 -->
         <MyCalendar />
         <!-- DDL展示表格 -->

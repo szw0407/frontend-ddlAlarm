@@ -7,7 +7,6 @@ const emit = defineEmits(["login-status-changed"])
 
 const account = ref(null)
 const password = ref(null)
-const tryStatus = ref(true)   // 尝试登录失败后转化为失败，用于登录失败提示与正常登录页面的切换
 const TipMsg = ref(["登录失败，请检查输入的账号和密码是否正确及是否启用了相关安全设置，或点击按钮再次进行登录尝试！", "正在尝试登录......"])   // 提示语句设置
 
 function loginTry() {

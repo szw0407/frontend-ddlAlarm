@@ -11,7 +11,7 @@ const p = defineProps(["index"])
 
 const showWindowData = ref({})
 const editWindowData = ref({})
-const inputEditData = ref({})
+const inputEditData = ref({"date":null,"ddlContent":null,"rank":null})
 
 
 function showItem(index) {
@@ -77,7 +77,8 @@ function confrimEdit() {
                 <el-date-picker v-model="inputEditData.date" type="datetime" placeholder="选择截止时间"
                     :default-time="editWindowData.date" />
             </el-form-item>
-            <el-form-item label="内容" :label-width="formLabelWidth"><el-input v-model="inputEditData.ddlContent"
+            <el-form-item label="内容" :label-width="formLabelWidth">
+                <el-input v-model="inputEditData.ddlContent"
                     :autosize="{ minRows: 6 }" type="textarea" placeholder="Please input" />
             </el-form-item>
             <el-form-item label="紧急等级" :label-width="formLabelWidth">
