@@ -13,6 +13,9 @@ class day {
 
 const cellWidth = ref("10px")
 const openCell = ref(null)
+
+const days = ref([])
+for(i=Date.now().setMouth(Date.now().getMouth()-1);i)
 </script>
 
 <template>

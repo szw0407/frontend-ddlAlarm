@@ -48,7 +48,7 @@ function loginTry() {
 #form {
     width: 80%;
     height: 40%;
-    margin: auto;
+    margin: 0 auto;
 }
 
 .inputArea {

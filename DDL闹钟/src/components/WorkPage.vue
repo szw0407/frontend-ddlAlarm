@@ -26,6 +26,7 @@ function refresh() {
     const loading = ElLoading.service({ fullscreen: true, text: TipMsg.value[1] })
     if (tableData.value = getMsg()) {
         loading.close()
+        refreshStatus.value = !refreshStatus.value
     }
     else {
         loading.close()
@@ -102,7 +103,7 @@ function deleteItem(index) {
         )
 }
 
-if (refreshStatus) {
+if (refreshStatus.value) {
     refresh()
 }
 </script>
