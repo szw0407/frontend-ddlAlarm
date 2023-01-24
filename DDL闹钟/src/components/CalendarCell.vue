@@ -1,6 +1,7 @@
 <script setup>
 import { ref, computed } from "vue"
 import { cellWidth, openCell } from "./MyCalendar.vue"
+import { showItem,editItem,deleteItem,DDLOperations } from "./DDLOperations.vue"
 
 defineProps(["day"])
 
@@ -27,7 +28,16 @@ function clickEvent(cellWidth, number) {
         <div :class="day.color" ref="cell">
             <p @click="clickEvent" class="cellContent"> {{ day.day }} </p>
             <div v-if="thisCellStatus" class="ddlShow">
-                <div class="ddlContent"></div>
+                <div class="ddlContent">
+                    <el-popover ref="popover" title="Title" :width="200" trigger="contextmenu"
+                        v-for="(content, group, rank) in day.show">
+                        <template #reference>
+                            <div><p>DDL内容 发布群聊 紧急程度</p></div>
+                            <div class="m-2"><p>{{content}}  {{group}}  {{rank}}</p></div>
+                        </template>
+                        <DDLOperations :index="day.index" />
+                    </el-popover>
+                </div>
             </div>
         </div>
     </div>
