@@ -6,8 +6,6 @@ import { showWindowVisible, editWindowVisible, tableData, TipMsg } from "./WorkP
 
 const p = defineProps(["index"])
 
-
-
 const showWindowData = ref({})
 const editWindowData = ref({})
 const inputEditData = ref({"date":null,"ddlContent":null,"rank":null})

@@ -1,12 +1,16 @@
 <script setup>
 import { ref } from "vue"
-import { ElMessageBox,ElLoading } from 'element-plus'
+import { ElMessageBox, ElLoading } from 'element-plus'
 
 const emit = defineEmits(["login-status-changed"])
 
 const account = ref(null)
 const password = ref(null)
 const TipMsg = ref(["登录失败，请检查输入的账号和密码是否正确及是否启用了相关安全设置，或点击按钮再次进行登录尝试！", "正在尝试登录......"])   // 提示语句设置
+
+function login(a, b) {
+    return true;
+}
 
 function loginTry() {
     onSubmit()       // 触发表单提交动作
@@ -33,32 +37,36 @@ function loginTry() {
 
 <template>
     <div id="loginPage">
-        <form id="form">
+        <el-form id="form">
             <el-input class="inputArea" v-model="account" placeholder="Account" maxlength="10" />
             <el-input class="inputArea" v-model="password" type="password" placeholder="Password" show-password
                 maxlength="15" />
-            <button id="loginButton" @click="loginTry"> Login </button> <!-- 按了就触发登录动作 -->>
-        </form>
+            <el-button id="loginButton" @click="loginTry"> Login </el-button> <!-- 按了就触发登录动作 -->
+        </el-form>
     </div>
 </template>
 
 <style>
+#loginPage {
+    width: 100%;
+}
+
 #form {
     width: 80%;
-    height: 40%;
     margin: 0 auto;
 }
 
 .inputArea {
-    width: 60%;
-    height: 10px;
+    width: 25%;
+    height: 25px;
     margin: 10px;
 }
 
 #loginButton {
-    width: 10px;
-    height: 5px;
+    width: 55px;
+    height: 25px;
     color: brown;
-    background-color: beige;
+    background-color: white;
+    align-items: center;
 }
 </style>

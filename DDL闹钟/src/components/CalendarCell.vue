@@ -1,8 +1,8 @@
 <script setup>
 import { ref, computed } from "vue"
 
-import { cellWidth, openCell } from "./MyCalendar.vue"
-import { showItem,editItem,deleteItem,DDLOperations } from "./DDLOperations.vue"
+import { cellWidth, openCell } from "./export.js"
+import DDLOperations  from "./DDLOperations.vue"
 
 defineProps(["day"])
 

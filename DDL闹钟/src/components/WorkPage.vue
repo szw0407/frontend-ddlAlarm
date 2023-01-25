@@ -2,20 +2,14 @@
 import {  ref } from "vue"
 import { ElMessageBox,ElLoading } from 'element-plus'
 
-import { MyCalendar } from "./MyCalendar.vue"
-import { DDLOperations } from "./DDLOperations.vue"
-import { MyAvatar } from "./MyAvatar.vue"
+import  MyCalendar  from "./MyCalendar.vue"
+import  DDLOperations  from "./DDLOperations.vue"
+import  MyAvatar  from "./MyAvatar.vue"
+import { TipMsg,tableData } from "./export.js"
 
 const emit = defineEmits(["login-status-changed"])
 
-const TipMsg = ref([" 是否确认登出？ ", "正在获取最新ddl信息......", "获取QQ聊天数据失败，请重试。",
-                     "正在提交DDL修改数据......", "DDL信息修改成功！", "确认要删除吗？", "正在删除......"])   // 提示语句设置
-
 const refreshStatus = ref(true)   // 刷新（即数据获取）状态，默认登录后进行一次数据获取
-const showWindowVisible = ref(false)
-const editWindowVisible = ref(false)
-
-const tableData = ref([])
 
 const rank2Class = ref({ "非常紧急": "red", "紧急": "yellow", "不紧急": "green" })
 const tableArary = ref({ "ddlContent": "DDL内容", "date": "DDL截止日期", "group": "DDL发布群聊",

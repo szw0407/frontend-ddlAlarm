@@ -1,8 +1,8 @@
 <script setup>
 import { ref } from "vue"
 
-import { CalendarCell } from "./CalendarCell.vue"
-import { tableData } from "./WorkPage.vue"
+import  CalendarCell from "./CalendarCell.vue"
+import { tableData } from "./export.js"
 
 class day {
     constructor(Data) {
@@ -14,11 +14,8 @@ class day {
     }
 }
 
-const cellWidth = ref("10px")
-const openCell = ref(null)
-
 const days = ref([])
-// for(i=Date.now().setMouth(Date.now().getMouth()-1);i)   这里是在把基于ddl单位的数据转换为基于day对象为单位的表现形式，还没做完
+ for(i=Date.now().setMouth(Date.now().getMouth()-1);i)   //这里是在把基于ddl单位的数据转换为基于day对象为单位的表现形式，还没做完
 </script>
 
 <template>
@@ -26,8 +23,8 @@ const days = ref([])
         <template #reference>
             <el-button style="margin: 16px">纵览</el-button>
         </template>
-        <div>
-            <CalendarCell v-for="day in tableData">{{ day }}</CalendarCell>
+        <div class="width: 80px;">
+            <CalendarCell v-for="day in days">{{ day }}</CalendarCell>
         </div>
     </el-popover>
 </template> 
