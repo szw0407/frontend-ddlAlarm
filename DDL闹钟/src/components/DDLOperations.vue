@@ -1,7 +1,6 @@
 <script setup>
 import { ref } from "vue"
-import { ElMessageBox } from 'element-plus'
-import { ElLoading } from 'element-plus'
+import { ElMessageBox,ElLoading } from 'element-plus'
 
 import { showWindowVisible, editWindowVisible, tableData, TipMsg } from "./WorkPage.vue"
 

@@ -1,7 +1,7 @@
 <script setup>
 import { ref } from "vue"
-import { ElMessageBox } from 'element-plus'
-import { ElLoading } from 'element-plus'
+import { ElMessageBox,ElLoading } from 'element-plus'
+
 import { tableData } from "./WorkPage.vue"
 
 const emits = defineEmits(["signOut"])
