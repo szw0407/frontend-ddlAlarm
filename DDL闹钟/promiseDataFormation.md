@@ -31,7 +31,7 @@ Data = {
         }
 ```
 ## 具体介绍：
-+ `Data（希望传入的数据总和）`  
++ `Data`  
   + `userInformation`
     + 其值为一个对象，存放用户信息
     1. `"avatarAddress"` 
@@ -42,8 +42,8 @@ Data = {
         1. `"ddlContent"`
            + 其值为一个字符串，该ddl的摘要
         2. `"date"`
-           + 其值为一个字符串，该ddl的精确到分的截止时间，格式应为:  
-              > "yy-mm-ddThh:mm"
+           + 其值为一个字符串，该ddl精确到分的截止时间，格式应为:  
+              > "yyyy-MM-dd'T'HH:mm:ss"
         3. `"group"`
            + 其值为一个字符串，该ddl的发布群聊
         4. `"rank"`
