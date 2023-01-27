@@ -15,7 +15,7 @@ class day {
 }
 
 const days = ref([])
- for(i=Date.now().setMouth(Date.now().getMouth()-1);i)   //这里是在把基于ddl单位的数据转换为基于day对象为单位的表现形式，还没做完
+ //for(i=Date.now().setMouth(Date.now().getMouth()-1);i)   //这里是在把基于ddl单位的数据转换为基于day对象为单位的表现形式，还没做完
 </script>
 
 <template>
