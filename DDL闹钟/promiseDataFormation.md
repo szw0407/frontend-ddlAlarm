@@ -43,7 +43,7 @@ Data = {
            + 其值为一个字符串，该ddl的摘要
         2. `"date"`
            + 其值为一个字符串，该ddl精确到分的截止时间，格式应为:  
-              > "yyyy-MM-dd'T'HH:mm:ss"
+              > "yyyy-MM-dd'T'HH:mm"
         3. `"group"`
            + 其值为一个字符串，该ddl的发布群聊
         4. `"rank"`
