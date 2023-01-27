@@ -2,7 +2,7 @@
 import { ref } from "vue"
 import { ElMessageBox,ElLoading } from 'element-plus'
 
-import { showWindowVisible, editWindowVisible, tableData, TipMsg } from "./WorkPage.vue"
+import { showWindowVisible, editWindowVisible, tableData, TipMsg } from "./export.js"
 
 const p = defineProps(["index"])
 

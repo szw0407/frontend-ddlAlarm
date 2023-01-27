@@ -2,18 +2,23 @@
 import { ref } from "vue"
 import { ElMessageBox, ElLoading } from 'element-plus'
 
+function login(a, b){
+    if (a==="admin"){
+        if (b==="123456"){
+            return true
+        }
+    }else {
+        return false
+    }
+}
+
 const emit = defineEmits(["login-status-changed"])
 
 const account = ref(null)
 const password = ref(null)
 const TipMsg = ref(["登录失败，请检查输入的账号和密码是否正确及是否启用了相关安全设置，或点击按钮再次进行登录尝试！", "正在尝试登录......"])   // 提示语句设置
 
-function login(a, b) {
-    return true;
-}
-
 function loginTry() {
-    onSubmit()       // 触发表单提交动作
     const loading = ElLoading.service({ fullscreen: true, text: TipMsg.value[2] })
     if (login(account.value, password.value)) {  // login函数留空，待接口文档给出
         loading.close()
@@ -38,6 +43,7 @@ function loginTry() {
 <template>
     <div id="loginPage">
         <el-form id="form">
+            <h1 id="title">DDL闹钟</h1>
             <el-input class="inputArea" v-model="account" placeholder="Account" maxlength="10" />
             <el-input class="inputArea" v-model="password" type="password" placeholder="Password" show-password
                 maxlength="15" />
@@ -52,8 +58,9 @@ function loginTry() {
 }
 
 #form {
-    width: 80%;
+    width: 15%;
     margin: 0 auto;
+    margin-top: 15%;
 }
 
 .inputArea {
@@ -67,6 +74,11 @@ function loginTry() {
     height: 25px;
     color: brown;
     background-color: white;
-    align-items: center;
+    margin-left: 40%;
+    margin-top: 15%;
+}
+
+#title{
+    margin-left: 25%;
 }
 </style>
