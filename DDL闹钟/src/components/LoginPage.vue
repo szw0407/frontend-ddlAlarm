@@ -2,12 +2,12 @@
 import { ref } from "vue"
 import { ElMessageBox, ElLoading } from 'element-plus'
 
-function login(a, b){
-    if (a==="admin"){
-        if (b==="123456"){
+function login(a, b) {
+    if (a === "admin") {
+        if (b === "123456") {
             return true
         }
-    }else {
+    } else {
         return false
     }
 }
@@ -44,41 +44,62 @@ function loginTry() {
     <div id="loginPage">
         <el-form id="form">
             <h1 id="title">DDL闹钟</h1>
-            <el-input class="inputArea" v-model="account" placeholder="Account" maxlength="10" />
-            <el-input class="inputArea" v-model="password" type="password" placeholder="Password" show-password
-                maxlength="15" />
-            <el-button id="loginButton" @click="loginTry"> Login </el-button> <!-- 按了就触发登录动作 -->
+            <span class="label"><h2 class="label-init">账户：</h2></span><input class="inputArea" v-model="account" maxlength="10" />
+            <span class="label"><h2 class="label-init">密码：</h2></span><input class="inputArea" v-model="password" type="password" show-password maxlength="15" />
+            <button id="loginButton" @click="loginTry"> 登录 </button> <!-- 按了就触发登录动作 -->
         </el-form>
     </div>
 </template>
 
-<style>
+<style scoped>
 #loginPage {
-    width: 100%;
+    width: 55%;
+    height: 90%;
+    border: 2px solid #000;
+    border-radius: 25px;
+    margin: 0 auto;
+    margin-top: 12%;
 }
 
 #form {
-    width: 15%;
+    width: 45%;
     margin: 0 auto;
-    margin-top: 15%;
 }
 
 .inputArea {
-    width: 25%;
-    height: 25px;
-    margin: 10px;
+    width: 100%;
+    height: 45px;
+    margin: 20px;
+    border-radius: 25px;
+    line-height: 25px;
+    font-size: 19px;
+    text-indent: 15px;
 }
 
 #loginButton {
-    width: 55px;
-    height: 25px;
+    width: 125px;
+    height: 45px;
     color: brown;
     background-color: white;
     margin-left: 40%;
+    border-radius: 25px;
+    font-size: 23px;
     margin-top: 15%;
+    margin-bottom: 15%;
 }
 
-#title{
-    margin-left: 25%;
+#title {
+    margin-left: 38%;
+    margin-top: 20%;
+}
+
+.label{
+    position: absolute;
+    left: 580px;
+}
+
+.label-init{
+    position: relative;
+    top: 8px;
 }
 </style>
