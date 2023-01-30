@@ -34,7 +34,7 @@ function loginTry() {
                 type: 'warning',
             }
         )
-            .then(loginTry())
+            .then(()=>{loginTry()})
     }
 
 }
