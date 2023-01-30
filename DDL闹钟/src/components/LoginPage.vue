@@ -6,7 +6,7 @@ function login(a, b) {
     if (a === "admin") {
         if (b === "123456") {
             return true
-        }
+        }else { return false}
     } else {
         return false
     }
@@ -19,7 +19,7 @@ const password = ref(null)
 const TipMsg = ref(["登录失败，请检查输入的账号和密码是否正确及是否启用了相关安全设置，或点击按钮再次进行登录尝试！", "正在尝试登录......"])   // 提示语句设置
 
 function loginTry() {
-    const loading = ElLoading.service({ fullscreen: true, text: TipMsg.value[2] })
+    const loading = ElLoading.service({ text: TipMsg.value[1] })
     if (login(account.value, password.value)) {  // login函数留空，待接口文档给出
         loading.close()
         emit("login-status-changed")    // 登录成功则结束加载，向根组件抛出个登录状态改变的事件，提醒切换实际工作页面

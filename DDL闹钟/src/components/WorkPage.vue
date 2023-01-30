@@ -15,6 +15,36 @@ const rank2Class = ref({ "非常紧急": "red", "紧急": "yellow", "不紧急":
 const tableArary = ref({ "ddlContent": "DDL内容", "date": "DDL截止日期", "group": "DDL发布群聊",
                          "rank": "紧急等级", "src": "原始信息" })
 
+function getMsg(){
+    return {
+        "userInformation": 
+            {
+                "avatarAddress": "../user1/avatar1.jpg" 
+            }, 
+
+        "ddl":   
+            [
+                {
+                    "ddlContent": "一起去保卫萝卜",  
+                    "date": "2022-06-08T22:12:32",   
+                    "group": "保卫萝卜二群",  
+                    "rank": "不紧急", 
+                    "src": "经研究，本群决定于2022年6月8日22时12分32秒，与大家一起去保卫萝卜，收到请回复！" 
+                }
+            ],
+
+        "ddlGroups": 
+            [
+                {  
+                    "groupName": "保卫萝卜二群", 
+                    "status": true
+                }
+            ]
+
+        }
+}
+
+
 function refresh() {
     const loading = ElLoading.service({ fullscreen: true, text: TipMsg.value[1] })
     if (tableData.value = getMsg()) {
