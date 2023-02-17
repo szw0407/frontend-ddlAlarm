@@ -7,6 +7,9 @@ import  DDLOperations  from "./DDLOperations.vue"
 import  MyAvatar  from "./MyAvatar.vue"
 import { TipMsg,tableData,rank2Class, getMsg } from "./export.js"
 
+const tableArary = ref({ "ddlContent": "DDL内容", "date": "DDL截止日期", "group": "DDL发布群聊",
+                         "rank": "紧急等级", "src": "原始信息" })
+
 const emit = defineEmits(["login-status-changed"])
 
 const refreshStatus = ref(true)   // 刷新（即数据获取）状态，默认登录后进行一次数据获取
@@ -33,7 +36,7 @@ function refresh() {
 }
 function signout() {
     ElMessageBox.confirm(
-        TipMsg.value[1],
+        TipMsg.value[0],
         "登出确定",
         {
             confirmButtonText: '确定登出',
@@ -41,11 +44,11 @@ function signout() {
             type: 'warning',
         }
     )
-        .then(emit("login-status-changed"))
+    .then(emit("login-status-changed"))
 }
 
 function tableRowClassName({ row, rowIndex }) {
-    return rank2Class.value[tableData.value[rowIndex]["rank"]]
+    return rank2Class.value[tableData.value.ddl[rowIndex].rank]
 }
 
 if (refreshStatus.value) {
@@ -61,11 +64,11 @@ if (refreshStatus.value) {
         <!-- 纵览 -->
         <MyCalendar />
         <!-- DDL展示表格 -->
-        <el-table :data="tableData" :border="true" style="width: 100%" :row-class-name="tableRowClassName">
+        <el-table :data="tableData.ddl" :border="true" style="width: 880px;margin: 0 auto;" :row-class-name="tableRowClassName">
             <el-table-column label="截止时间" width="180">
                 <template #default="scope">
                     <div style="display: flex; align-items: center">
-                        <span style="margin-left: 10px">{{ scope.row.date }}</span>
+                        <span style="margin-left: 10px">{{ scope.row.date.split("T")[0] }}</span>
                     </div>
                 </template>
             </el-table-column>
@@ -79,7 +82,7 @@ if (refreshStatus.value) {
             <el-table-column label="群聊" width="180">
                 <template #default="scope">
                     <div style="display: flex; align-items: center">
-                        <span style="margin-left: 10px">{{ scope.row.groupName }}</span>
+                        <span style="margin-left: 10px">{{ scope.row.group }}</span>
                     </div>
                 </template>
             </el-table-column>

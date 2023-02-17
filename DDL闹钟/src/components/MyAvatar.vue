@@ -1,8 +1,8 @@
 <script setup>
 import { ref } from "vue"
-import { ElMessageBox,ElLoading } from 'element-plus'
+import { ElMessageBox, ElLoading } from 'element-plus'
 
-import { tableData } from "./export.js"
+import { tableData, TipMsg } from "./export.js"
 
 const emits = defineEmits(["signOut"])
 
@@ -13,7 +13,16 @@ const settingWindowData = ref(temp)
 const settingWindowVisible = ref(false)
 
 function signOut() {
-    emits("signOut")
+    ElMessageBox.confirm(
+        TipMsg.value[0],
+        TipMsg.value[0],
+        {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning',
+        }
+    )
+    .then(()=>{emits("signOut")})
 }
 function confrimSettings() {
     const loading = ElLoading.service({ fullscreen: true, text: TipMsg.value[3] })

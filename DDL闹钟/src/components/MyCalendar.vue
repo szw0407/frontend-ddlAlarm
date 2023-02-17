@@ -9,8 +9,8 @@ class day {
     this.day = Data.getDate()
     this.color = "white" //Data.color
     this.weekRank = Data.getDay()
-    this.show = null //Data.information
-    // this.index = null //Data.index 
+    this.show = [] //Data.information
+    this.index = null
   }
 }
 
@@ -43,6 +43,8 @@ for (let ddl in tableData.value.ddl) {
     dateToFind.setDate(0)
   }
 
+  days.value[index].index = index
+
   // 根据紧急等级植入颜色
   switch(rank2Class[ddl.rank]){
     case "red" : days.value[index].color = "red";
@@ -57,18 +59,18 @@ for (let ddl in tableData.value.ddl) {
   }
 
   // 植入完整内容
-  days.value[index].show = ddl.src
+  days.value[index].show.push({"ddlContent":ddl.ddlContent, "group":ddl.group,"rank":ddl.rank})
 
 }
 
 </script>
 
 <template>
-  <el-popover placement="right" width="80px" trigger="click">
+  <el-popover placement="right" width="270px" trigger="click">
     <template #reference>
       <el-button style="margin: 16px">纵览</el-button>
     </template>
-    <div class="width: 80px;">
+    <div style="width:584px;margin-block:80px;">
       <CalendarCell v-for="day in days" :day="day"></CalendarCell>
     </div>
   </el-popover>
