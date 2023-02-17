@@ -5,45 +5,11 @@ import { ElMessageBox,ElLoading } from 'element-plus'
 import  MyCalendar  from "./MyCalendar.vue"
 import  DDLOperations  from "./DDLOperations.vue"
 import  MyAvatar  from "./MyAvatar.vue"
-import { TipMsg,tableData } from "./export.js"
+import { TipMsg,tableData,rank2Class, getMsg } from "./export.js"
 
 const emit = defineEmits(["login-status-changed"])
 
 const refreshStatus = ref(true)   // 刷新（即数据获取）状态，默认登录后进行一次数据获取
-
-const rank2Class = ref({ "非常紧急": "red", "紧急": "yellow", "不紧急": "green" })
-const tableArary = ref({ "ddlContent": "DDL内容", "date": "DDL截止日期", "group": "DDL发布群聊",
-                         "rank": "紧急等级", "src": "原始信息" })
-
-function getMsg(){
-    return {
-        "userInformation": 
-            {
-                "avatarAddress": "../user1/avatar1.jpg" 
-            }, 
-
-        "ddl":   
-            [
-                {
-                    "ddlContent": "一起去保卫萝卜",  
-                    "date": "2022-06-08T22:12:32",   
-                    "group": "保卫萝卜二群",  
-                    "rank": "不紧急", 
-                    "src": "经研究，本群决定于2022年6月8日22时12分32秒，与大家一起去保卫萝卜，收到请回复！" 
-                }
-            ],
-
-        "ddlGroups": 
-            [
-                {  
-                    "groupName": "保卫萝卜二群", 
-                    "status": true
-                }
-            ]
-
-        }
-}
-
 
 function refresh() {
     const loading = ElLoading.service({ fullscreen: true, text: TipMsg.value[1] })
@@ -79,7 +45,7 @@ function signout() {
 }
 
 function tableRowClassName({ row, rowIndex }) {
-    return rank2Class.value(tableData.value[rowIndex]["rank"])
+    return rank2Class.value[tableData.value[rowIndex]["rank"]]
 }
 
 if (refreshStatus.value) {

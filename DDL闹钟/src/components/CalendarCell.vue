@@ -4,17 +4,17 @@ import { ref, computed } from "vue"
 import { cellWidth, openCell } from "./export.js"
 import DDLOperations  from "./DDLOperations.vue"
 
-defineProps(["day"])
+const props = defineProps(["day"])
 
 const cell = ref(null)
 const thisCellStatus = computed(() => {
-    return openCell.value === day
+    return openCell.value === props.day
 })
 
 function clickEvent(cellWidth, number) {
     if (day.color !== "white") {
         if (!thisCellStatus.value) {
-            openCell.value = day
+            openCell.value = props.day
             cell.value.width = (cellWidth.value - "px") * (7 - number) + "" + "px"
         } else {
             openCell.value = null

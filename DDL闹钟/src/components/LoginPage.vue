@@ -1,6 +1,7 @@
 <script setup>
 import { ref } from "vue"
 import { ElMessageBox, ElLoading } from 'element-plus'
+import { tableData,getMsg } from "./export";
 
 const emit = defineEmits(["login-status-changed"])
 
@@ -13,6 +14,7 @@ const account = ref(null)
 const password = ref(null)
 
 async function login(account, password) {
+  tableData.value = getMsg()
   return new Promise(resolve => {
     setTimeout(() => {
       if (account === "admin" && password === "123456") {
@@ -20,7 +22,7 @@ async function login(account, password) {
       } else {
         resolve(false)
       }
-    }, 5000)
+    }, 2000)
   })
 }
 
@@ -33,8 +35,7 @@ async function loginTry() {
     if (loginTryCallback) {
       setTimeout(() => {
         loading.close()
-        // emit("login-status-changed")
-        console.log("LOgin ojk")
+       emit("login-status-changed")
       }, 2000)
     } else {
       loading.close()
