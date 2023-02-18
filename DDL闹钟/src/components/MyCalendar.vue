@@ -48,8 +48,7 @@ for (let tableDataIndex in tableData.value.ddl) {
   //   dateToFind.setDate(0)
   // }
 
-  console.log(tableData.value.ddl[tableDataIndex])
-  // days.value[index].index.push(tableDataIndex)
+  days.value[index].index.push(tableDataIndex)
 
   // 根据紧急等级植入颜色
   switch (rank2Class[tableData.value.ddl[tableDataIndex].rank]) {
@@ -79,32 +78,34 @@ for (let tableDataIndex in tableData.value.ddl) {
 let tempDays = []
 const showingMonth = ref(0)
 showingMonth.value = (new Date).getMonth()
-tempDays.push(days.value.filter(day => day.month === showingMonth.value))
+tempDays = (days.value.filter(day => day.month === showingMonth.value))
 
 function addWhite() {
   let tempFrontDay = new Date(tableData.value.ddl[tempDays[0].index])
   let frontWhite = []
   if (!tempDays[0].weekRank) {
     tempFrontDay.setDate(tempFrontDay.getDate() - 1);
-    frontWhite.push(new day(tempFrontDay))
+    frontWhite.unshift(new day(tempFrontDay))
     tempFrontDay.setDate(tempFrontDay.getDate() - 1);
     while (!frontWhite[0].weekRank) {
-      frontWhite.push(new day(tempFrontDay))
+      frontWhite.unshift(new day(tempFrontDay))
       tempFrontDay.setDate(tempFrontDay.getDate() - 1);
     }
   }
   let tempBackDay = new Date(tableData.value.ddl[tempDays[tempDays.length - 1].index])
   let backWhite = []
-  if (tempDays[tempDays.length - 1 !== 6].weekRank) {
+  if (tempDays[tempDays.length - 1].weekRank !== 6) {
     tempBackDay.setDate(tempBackDay.getDate() + 1);
     backWhite.push(new day(tempBackDay))
     tempBackDay.setDate(tempBackDay.getDate() + 1);
-    while (frontWhite[0].weekRank !== 6) {
+    while (backWhite[backWhite.length - 1].weekRank !== 6) {
       backWhite.push(new day(tempBackDay))
       tempBackDay.setDate(tempBackDay.getDate() + 1);
     }
   }
-  showingDays = concat(frontWhite, tempDays, backWhite)
+  console.log(frontWhite, tempDays, backWhite)
+  showingDays.value = showingDays.value.concat(frontWhite, tempDays, backWhite)
+  console.log(showingDays.value)
 }
 addWhite()
 
