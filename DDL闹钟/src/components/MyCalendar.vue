@@ -11,7 +11,7 @@ class day {
     this.color = "white" //Data.color
     this.weekRank = Data.getDay()
     this.show = [] //Data.information
-    this.index = 0
+    this.index = []
   }
 }
 
@@ -29,14 +29,14 @@ days.value = [...generateDays(
   new Date(new Date().setMonth(new Date().getMonth() + 2)).setDate(0)
 )];
 
-for (let ddl in tableData.value.ddl) {
+for (let tableDataIndex in tableData.value.ddl) {
 
   // 找对应的index
-  const dateToFind = new Date(ddl.date);
+  const dateToFind = new Date(tableData.value.ddl[tableDataIndex].date);
   let index = 1
   let tempMonth = dateToFind.getMonth()
   let tempDate = dateToFind.getDate()
-  index = days.value.findIndex((day) => day.month === tempMonth && day.day === tempDate )
+  index = days.value.findIndex((day) => day.month === tempMonth && day.day === tempDate)
   // let d = new Date()
   // d.setDate(0)
   // let counts = dateToFind.getMonth() - d.getMonth()
@@ -48,13 +48,14 @@ for (let ddl in tableData.value.ddl) {
   //   dateToFind.setDate(0)
   // }
 
-  days.value[index].index = tableData.value.ddl.findIndex((srcDDL) => srcDDL === ddl )
+  console.log(tableData.value.ddl[tableDataIndex])
+  // days.value[index].index.push(tableDataIndex)
 
   // 根据紧急等级植入颜色
-  switch (rank2Class[ddl.rank]) {
+  switch (rank2Class[tableData.value.ddl[tableDataIndex].rank]) {
     case "red": days.value[index].color = "red";
       break;
-    case "yellow": if (days.days.value[index].color !== "red") {
+    case "yellow": if (days.value[index].color !== "red") {
       days.value[index].color = "yellow";
     }
       break;
@@ -64,7 +65,11 @@ for (let ddl in tableData.value.ddl) {
   }
 
   // 植入完整内容
-  days.value[index].show.push({ "ddlContent": ddl.ddlContent, "group": ddl.group, "rank": ddl.rank })
+  days.value[index].show.push({
+    "ddlContent": tableData.value.ddl[tableDataIndex].ddlContent,
+    "group": tableData.value.ddl[tableDataIndex].group,
+    "rank": tableData.value.ddl[tableDataIndex].rank
+  })
 
 }
 
@@ -99,9 +104,9 @@ function addWhite() {
       tempBackDay.setDate(tempBackDay.getDate() + 1);
     }
   }
-  showingDays = concat(frontWhite,tempDays,backWhite)
+  showingDays = concat(frontWhite, tempDays, backWhite)
 }
-  addWhite()
+addWhite()
 
 </script>
 
@@ -111,10 +116,10 @@ function addWhite() {
       <el-button style="margin: 40px;right: 260px;position: absolute;top: 70px;" size="large">纵览</el-button>
     </template>
     <div style="width:584px;margin-block:80px;">
-    <div>
-      <div :class="CalendarCell" @click="showingMonth--" style="display: inline-block;">&lt;</div>
-      <div :class="CalendarCell" @click="showingMonth++" style="display: inline-block;">></div>
-    </div>
+      <div>
+        <div :class="CalendarCell" @click="showingMonth--" style="display: inline-block;">&lt;</div>
+        <div :class="CalendarCell" @click="showingMonth++" style="display: inline-block;">></div>
+      </div>
       <CalendarCell v-for="day in showingDays" :day="day"></CalendarCell>
     </div>
   </el-popover>

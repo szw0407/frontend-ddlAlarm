@@ -4,7 +4,7 @@ import { ElMessageBox, ElLoading } from 'element-plus'
 
 import { tableData, TipMsg } from "./export.js"
 
-const emits = defineEmits(["signOut", "refresh"])
+const emits = defineEmits(["signOut", "refreshOn"])
 
 const userAvatar = ref(tableData.value.userInformation.avatarAddress)
 const groups = tableData.value.ddlGroups
@@ -41,7 +41,7 @@ function confrimSettings() {
     } else {
         //pushSettingData(settingWindowData.value)
         loading.close()
-        emits("refresh")
+        emits("refreshOn")
 
     }
     ElMessageBox.confirm(
