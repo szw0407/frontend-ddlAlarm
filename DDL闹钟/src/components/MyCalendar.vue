@@ -81,10 +81,10 @@ function addWhite() {
   let frontWhite = []
   if (!tempDays[0].weekRank) {
     tempFrontDay.setDate(tempFrontDay.getDate() - 1);
-    frontWhite.push(day(tempFrontDay))
+    frontWhite.push(new day(tempFrontDay))
     tempFrontDay.setDate(tempFrontDay.getDate() - 1);
     while (!frontWhite[0].weekRank) {
-      frontWhite.push(day(tempFrontDay))
+      frontWhite.push(new day(tempFrontDay))
       tempFrontDay.setDate(tempFrontDay.getDate() - 1);
     }
   }
@@ -92,10 +92,10 @@ function addWhite() {
   let backWhite = []
   if (tempDays[tempDays.length - 1 !== 6].weekRank) {
     tempBackDay.setDate(tempBackDay.getDate() + 1);
-    backWhite.push(day(tempBackDay))
+    backWhite.push(new day(tempBackDay))
     tempBackDay.setDate(tempBackDay.getDate() + 1);
     while (frontWhite[0].weekRank !== 6) {
-      backWhite.push(day(tempBackDay))
+      backWhite.push(new day(tempBackDay))
       tempBackDay.setDate(tempBackDay.getDate() + 1);
     }
   }
