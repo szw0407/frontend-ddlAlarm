@@ -4,13 +4,23 @@ import { ElMessageBox, ElLoading } from 'element-plus'
 
 import { tableData, TipMsg } from "./export.js"
 
-const emits = defineEmits(["signOut"])
+const emits = defineEmits(["signOut", "refresh"])
 
-const userAvatar = ref(tableData.userAvatar)
-const groups = ref(tableData.groups)
-const temp = groups.value
-const settingWindowData = ref(temp)
+const userAvatar = ref(tableData.value.userInformation.avatarAddress)
+const groups = tableData.value.ddlGroups
+const settingWindowData = ref(groups)
 const settingWindowVisible = ref(false)
+const oneWord = ref("one word get wrong.")
+
+async function getOneWords() {
+  const response = await fetch('https://v1.hitokoto.cn');
+  const data = await response.json();
+  return data.hitokoto;
+}
+
+getOneWords().then((words) => {
+  oneWord.value = words;
+});
 
 function signOut() {
     ElMessageBox.confirm(
@@ -22,15 +32,17 @@ function signOut() {
             type: 'warning',
         }
     )
-    .then(()=>{emits("signOut")})
+        .then(() => { emits("signOut") })
 }
 function confrimSettings() {
     const loading = ElLoading.service({ fullscreen: true, text: TipMsg.value[3] })
     if (groups.value === settingWindowData.value) {
         loading.close()
     } else {
-        pushSettingData(settingWindowData.value)
+        //pushSettingData(settingWindowData.value)
         loading.close()
+        emits("refresh")
+
     }
     ElMessageBox.confirm(
         "抓取群聊设定成功！",
@@ -46,13 +58,18 @@ function confrimSettings() {
 </script>
 
 <template>
-    <div style="display: flex; align-items: center">
+    <div id="avatar">
+        <div style="margin-left: 40px;">
+            <h1>DDL闹钟</h1>
+            <p>{{ oneWord }}</p>
+            <p style="font-size: large;"><b>DDL</b>列表</p>
+        </div>
         <el-popover trigger="click">
             <template #reference>
-                <el-avatar src="userAvatar" />
+                <el-avatar src="userAvatar" style="position: absolute; right: 40px;" :size="100" />
             </template>
             <div :width="75">
-                <div :width="75" style="text-align: center; margin-top: 15px;" @click="settings">
+                <div :width="75" style="text-align: center; margin-top: 15px;" @click="settingWindowVisible = true">
                     设定</div>
                 <el-divider />
                 <div :width="75" style="text-align: center; margin-bottom: 15px;" @click="signOut">
@@ -62,24 +79,12 @@ function confrimSettings() {
         </el-popover>
     </div>
 
-    <div class="demo-rich-conent" style="display: flex; gap: 16px; flex-direction: column">
-        <h1>设定</h1>
-        <p>版本号： V 1.0 alpha</p>
-        <p>选择群聊：</p>
-        <div v-for="group in groups">
-            <el-checkbox v-model="group.status">{{ group.group }}</el-checkbox>
-            <button>提交</button>
-            <button>取消</button>
-        </div>
-    </div>
-
-
     <el-dialog v-model="settingWindowVisible" :show-close="false" align-center title="设定">
         <div>
             <p>版本号： V 1.0 alpha</p>
             <p>选择群聊：</p>
             <div v-for="group in groups">
-                <el-checkbox v-model="group.status">{{ group.group }}</el-checkbox>
+                <el-checkbox v-model="group.status">{{ group.groupName }}</el-checkbox>
             </div>
         </div>
         <template #footer>
@@ -92,3 +97,10 @@ function confrimSettings() {
         </template>
     </el-dialog>
 </template>
+
+<style scoped>
+#avatar {
+    display: flex;
+    align-items: center;
+}
+</style>

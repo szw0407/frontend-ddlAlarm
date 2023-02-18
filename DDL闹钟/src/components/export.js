@@ -18,7 +18,7 @@ export function getMsg(){
     return {
         "userInformation": 
             {
-                "avatarAddress": "../user1/avatar1.jpg" 
+                "avatarAddress": "C:\\Users\\1\\Pictures\\Saved Pictures" 
             }, 
 
         "ddl":   

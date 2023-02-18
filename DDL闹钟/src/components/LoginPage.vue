@@ -17,7 +17,7 @@ async function login(account, password) {
   tableData.value = getMsg()
   return new Promise(resolve => {
     setTimeout(() => {
-      if (account === "admin" && password === "123456") {
+      if (account === "1" && password === "1") {
         resolve(true)
       } else {
         resolve(false)

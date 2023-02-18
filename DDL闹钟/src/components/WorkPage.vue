@@ -1,38 +1,39 @@
 <script setup>
-import {  ref } from "vue"
-import { ElMessageBox,ElLoading } from 'element-plus'
+import { ref, watch } from "vue"
+import { throttle } from "lodash"
+import { ElMessageBox, ElLoading } from 'element-plus'
 
-import  MyCalendar  from "./MyCalendar.vue"
-import  DDLOperations  from "./DDLOperations.vue"
-import  MyAvatar  from "./MyAvatar.vue"
-import { TipMsg,tableData,rank2Class, getMsg } from "./export.js"
-
-const tableArary = ref({ "ddlContent": "DDL内容", "date": "DDL截止日期", "group": "DDL发布群聊",
-                         "rank": "紧急等级", "src": "原始信息" })
+import MyCalendar from "./MyCalendar.vue"
+import DDLOperations from "./DDLOperations.vue"
+import MyAvatar from "./MyAvatar.vue"
+import { TipMsg, tableData, rank2Class, getMsg } from "./export.js"
 
 const emit = defineEmits(["login-status-changed"])
 
-const refreshStatus = ref(true)   // 刷新（即数据获取）状态，默认登录后进行一次数据获取
+const refreshStatus = ref(true)
+refresh()
 
-function refresh() {
-    const loading = ElLoading.service({ fullscreen: true, text: TipMsg.value[1] })
-    if (tableData.value = getMsg()) {
-        loading.close()
-        refreshStatus.value = !refreshStatus.value
-    }
-    else {
-        loading.close()
-        ElMessageBox.confirm(
-            TipMsg.value[2],
-            "数据获取失败",
-            {
-                confirmButtonText: '再次获取',
-                cancelButtonText: '取消',
-                type: 'warning',
-            }
-        )
-            .then(refresh())
-    }
+
+async function refresh() {
+    const loading = ElLoading.service({ text: TipMsg.value[1] })
+        const data = getMsg()
+        if (!!data) {
+            loading.close()
+            tableData.value = data
+            refreshStatus.value = false
+        } else {
+            loading.close()
+            await confirmRetry()
+        }
+}
+
+async function confirmRetry() {
+    const confirm = await ElMessageBox.confirm('数据获取失败', TipMsg.value[2], {
+        confirmButtonText: '再次获取',
+        cancelButtonText: '取消',
+        type: 'warning'
+    })
+    if (confirm === "confirm") await refresh()
 }
 function signout() {
     ElMessageBox.confirm(
@@ -44,27 +45,31 @@ function signout() {
             type: 'warning',
         }
     )
-    .then(emit("login-status-changed"))
+        .then(emit("login-status-changed"))
 }
 
 function tableRowClassName({ row, rowIndex }) {
     return rank2Class.value[tableData.value.ddl[rowIndex].rank]
 }
 
-if (refreshStatus.value) {
-    refresh()
-}
+watch(refreshStatus, () => {
+    refresh();
+})
 </script>
 
 <template>
-    <div>
+    <div style="margin-top: 20px;">
 
         <!-- 头像 -->
-        <MyAvatar @signOut="signout" />
+        <MyAvatar @signOut="signout" @refreshOn="refreshStatus = true;" />
         <!-- 纵览 -->
         <MyCalendar />
+        <!-- 刷新 -->
+        <el-button style="margin: 40px;position: absolute;right: 140px;top:70px;" size="large"
+            @click="refreshStatus = true">刷新</el-button>
         <!-- DDL展示表格 -->
-        <el-table :data="tableData.ddl" :border="true" style="width: 880px;margin: 0 auto;" :row-class-name="tableRowClassName">
+        <el-table :data="tableData.ddl" :border="true" style="width: 95%;margin: 0 auto;"
+            :row-class-name="tableRowClassName">
             <el-table-column label="截止时间" width="180">
                 <template #default="scope">
                     <div style="display: flex; align-items: center">

@@ -1,4 +1,4 @@
-<script setup>
+<!-- <script setup>
 import { ref } from "vue"
 import { ElMessageBox,ElLoading } from 'element-plus'
 
@@ -7,17 +7,21 @@ import { showWindowVisible, editWindowVisible, tableData, TipMsg } from "./expor
 const p = defineProps(["index"])
 
 const showWindowData = ref({})
-const editWindowData = ref({})
+const editWindowData = ref({"date":null,"ddlContent":null,"rank":null})
 const inputEditData = ref({"date":null,"ddlContent":null,"rank":null})
 
 
 function showItem(index) {
     showWindowVisible.value = true
-    showWindowData.value = tableData.value[index]
+    showWindowData.value = tableData.value.ddl[index]
 }
 function editItem(index) {
     editWindowVisible.value = true
-    editWindowData.value = tableData.value[index]
+    for (a in [editWindowData.value , inputEditData.value]){
+        for (b in [date,ddlContent,rank]){
+            a[b]=tableData.value.ddl[index][b]
+        }
+    }
 }
 function deleteItem(index) {
     ElMessageBox.confirm(
@@ -33,7 +37,7 @@ function deleteItem(index) {
             (index) => {
                 const loading = ElLoading.service({ fullscreen: true, text: TipMsg.value[6] })
                 pushDelete(index)
-                tableData.value.splice(index, 1)
+                tableData.value.ddl[index].splice(index, 1)
                 loading.close()
             }
         )
@@ -59,12 +63,12 @@ function confrimEdit() {
     )
     editWindowVisible.value = false
 }
-</script>
+</script> -->
 
 <template>
     <!-- DDL详情弹窗 -->
-    <el-dialog v-model="showWindowVisible" :show-close="false" align-center title="DDL详情">
-        <p v-for=" (y, x) in showWindowData "><b>{{ x }}</b> : {{ y }}</p>
+    <el-dialog v-model="showWindowVisible" show-close="false" align-center title="DDL详情">
+        <p v-for=" (y, x) in showWindowData "><b>{{ tableArary[x] }}</b> : {{ y }}</p>
     </el-dialog>
 
     <!-- DDL编辑弹窗 -->
@@ -99,15 +103,84 @@ function confrimEdit() {
 
     <!-- 三个按钮 -->
     <div>
-        <el-button size="small" @click="showItem(p.index)"><el-icon>
+        <el-button size="small" @click="showItem(prop.index)"><el-icon>
                 <Hide />
             </el-icon></el-button>
-        <el-button size="small" @click="editItem(p.index)"><el-icon>
+        <el-button size="small" @click="editItem(prop.index)"><el-icon>
                 <EditPen />
             </el-icon></el-button>
-        <el-button size="small" @click="deleteItem(p.index)"><el-icon>
+        <el-button size="small" @click="deleteItem(prop.index)"><el-icon>
                 <Delete />
             </el-icon></el-button>
     </div>
 
 </template>
+
+
+<script setup>
+import { ref, defineProps } from "vue";
+import { ElMessageBox, ElLoading } from "element-plus";
+
+import { showWindowVisible, editWindowVisible, tableData, TipMsg } from "./export.js";
+
+const prop = defineProps(["index"]);
+
+const showWindowData = ref({});
+const editWindowData = ref({ date: null, ddlContent: null, rank: null });
+const inputEditData = ref({ date: null, ddlContent: null, rank: null });
+const tableArary = ref({ "ddlContent": "DDL内容", "date": "DDL截止日期", "group": "DDL发布群聊",
+                         "rank": "紧急等级", "src": "原始信息" })
+
+function showItem(index) {
+  showWindowVisible.value = true
+  showWindowData.value = tableData.value.ddl[index]
+}
+
+
+function editItem(index) {
+  const item = tableData.value.ddl[index];
+  if (!item) {
+    console.error(`Invalid index: ${index}`);
+    return;
+  }
+  inputEditData.value = { ...item };
+  editWindowData.value = { ...item };
+  editWindowVisible.value = true;
+}
+
+
+function deleteItem(index) {
+  ElMessageBox.confirm(TipMsg.value[5], "删除确认", {
+    confirmButtonText: "确定",
+    cancelButtonText: "取消",
+    type: "warning",
+  }).then(() => {
+    const loading = ElLoading.service({
+      fullscreen: true,
+      text: TipMsg.value[6],
+    });
+    pushDelete(index);
+    tableData.value.ddl.splice(index, 1);
+    loading.close();
+  });
+}
+
+function confirmEdit() {
+  const loading = ElLoading.service({
+    fullscreen: true,
+    text: TipMsg.value[3],
+  });
+  if (JSON.stringify(inputEditData.value) === JSON.stringify(editWindowData.value)) {
+    loading.close();
+  } else {
+    pushEditData(inputEditData.value);
+    loading.close();
+  }
+  ElMessageBox.confirm(TipMsg.value[4], "修改成功！", {
+    confirmButtonText: "确定",
+    cancelButtonText: "取消",
+    type: "warning",
+  });
+  editWindowVisible.value = false;
+}
+</script>
