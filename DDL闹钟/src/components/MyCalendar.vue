@@ -1,5 +1,4 @@
 <script setup>
-import { concat } from "lodash";
 import { ref } from "vue"
 
 import CalendarCell from "./CalendarCell.vue"
@@ -17,6 +16,7 @@ class day {
 }
 
 const days = ref([])
+const showingDays = ref([])
 
 function* generateDays(start, end) {
   for (let currentDate = new Date(start); currentDate <= end; currentDate.setDate(currentDate.getDate() + 1)) {
@@ -99,9 +99,9 @@ function addWhite() {
       tempBackDay.setDate(tempBackDay.getDate() + 1);
     }
   }
-  addWhite()
-  const showingDays = concat(frontWhite,tempDays,backWhite)
+  showingDays = concat(frontWhite,tempDays,backWhite)
 }
+  addWhite()
 
 </script>
 
