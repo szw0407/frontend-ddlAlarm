@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from "vue"
+import { watch,ref } from "vue"
 
 import CalendarCell from "./CalendarCell.vue"
 import { tableData, rank2Class } from "./export.js"
@@ -12,6 +12,7 @@ class day {
     this.weekRank = Data.getDay()
     this.show = [] //Data.information
     this.index = []
+    this.date = Data
   }
 }
 
@@ -78,7 +79,6 @@ for (let tableDataIndex in tableData.value.ddl) {
 let tempDays = []
 const showingMonth = ref(0)
 showingMonth.value = (new Date).getMonth()
-tempDays = (days.value.filter(day => day.month === showingMonth.value))
 
 // function addWhite() {
 //   let tempFrontDay = new Date(tableData.value.ddl[tempDays[0].index])
@@ -109,17 +109,22 @@ tempDays = (days.value.filter(day => day.month === showingMonth.value))
 // }
 
 function addWhite() {
-  const tempFrontDay = new Date(tableData.value.ddl[tempDays[0].index]);
-  const tempBackDay = new Date(tableData.value.ddl[tempDays[tempDays.length - 1].index]);
+  tempDays=[];
+  showingDays.value =[];
+  tempDays =(days.value.filter(day => day.month === showingMonth.value));
+  console.log(tempDays)
+  const tempFrontDay = new Date(tempDays[0].date);
+  const tempBackDay = new Date(tempDays[tempDays.length - 1].date);
   const frontWhite = [];
   const backWhite = [];
 
   // 添加前置白天
-  if (!tempDays[0].weekRank) {
+  if (tempDays[0].weekRank) {
     for (let i = 1; i <= 7; i++) {
-      const temp = new Date(tempFrontDay.getTime() - i * 24 * 60 * 60 * 1000);
+      let temp = new Date(tempFrontDay.getTime());
+      temp.setDate(temp.getDate()-i)
       if (temp.getDay() !== 0) {
-        frontWhite.push(new day(temp));
+        frontWhite.unshift((new day(temp)));
       }
       else {
         break;
@@ -130,20 +135,23 @@ function addWhite() {
   // 添加后置白天
   if (tempDays[tempDays.length - 1].weekRank !== 6) {
     for (let i = 1; i <= 7; i++) {
-      const temp = new Date(tempBackDay.getTime() + i * 24 * 60 * 60 * 1000);
-      if (temp.getDay() !== 6) {
-        backWhite.push(new day(temp));
-      }
-      else {
+      let temp = new Date(tempBackDay.getTime());
+      temp.setDate(temp.getDate()+i)
+      if (temp.getDay() === 6) {
         break;
       }
+      backWhite.push((new day(temp)));
     }
   }
 
   showingDays.value = [...frontWhite, ...tempDays, ...backWhite];
+  console.log(showingDays.value)
+  console.log(frontWhite)
+  console.log(backWhite)
 }
 
 addWhite()
+watch(showingMonth,addWhite)
 
 </script>
 
@@ -154,8 +162,8 @@ addWhite()
     </template>
     <div style="width:584px;margin-block:80px;">
       <div>
-        <div :class="CalendarCell" @click="tempDays=[];showingDays=[];showingMonth--;" style="display: inline-block;">&lt;</div>
-        <div :class="CalendarCell" @click="tempDays=[];showingDays=[];showingMonth++;" style="display: inline-block;">></div>
+        <div :class="CalendarCell" @click="showingMonth--;" style="display: inline-block;">&lt;</div>
+        <div :class="CalendarCell" @click="showingMonth++;" style="display: inline-block;">></div>
       </div>
       <CalendarCell v-for="day in showingDays" :day="day"></CalendarCell>
     </div>
