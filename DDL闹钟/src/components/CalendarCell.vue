@@ -26,15 +26,15 @@ function clickEvent(cellWidth, number) {
 
 <template>
     <div style="display:inline-block;">
-        <div :class="day.color" ref="cell" style="height:80px;width:80px">
+        <div :style="{backgroundColor: day.rank}" ref="cell" style="height:80px;width:80px">
             <p @click="clickEvent" class="cellContent"> {{ day.day }} </p>
             <div v-if="thisCellStatus" class="ddlShow">
                 <div class="ddlContent">
-                    <el-popover ref="popover" title="Title" :width="200" trigger="contextmenu"
+                    <el-popover ref="popover" title="Title" trigger="contextmenu"
                         v-for="ddl in day.show">
                         <template #reference>
                             <div><p>DDL内容 发布群聊 紧急程度</p></div>
-                            <div class="m-2"><p>{{ddl.ddlcontent}}  {{ddl.group}}  {{ddl.rank}}</p></div>
+                            <div><p>{{ddl.ddlcontent}}  {{ddl.group}}  {{ddl.rank}}</p></div>
                         </template>
                         <DDLOperations :index="day.index" />
                     </el-popover>

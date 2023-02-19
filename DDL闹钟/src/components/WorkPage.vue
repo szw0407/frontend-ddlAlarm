@@ -48,8 +48,8 @@ function signout() {
         .then(emit("login-status-changed"))
 }
 
-function tableRowClassName({ row, rowIndex }) {
-    return rank2Class.value[tableData.value.ddl[rowIndex].rank]
+function tableRowClassName( row ) {
+    return rank2Class.value[row.rank]
 }
 
 watch(refreshStatus, () => {
@@ -68,32 +68,31 @@ watch(refreshStatus, () => {
         <el-button style="margin: 40px;position: absolute;right: 140px;top:70px;" size="large"
             @click="refreshStatus = true">刷新</el-button>
         <!-- DDL展示表格 -->
-        <el-table :data="tableData.ddl" :border="true" style="width: 95%;margin: 0 auto;"
-            :row-class-name="tableRowClassName">
+        <el-table :data="tableData.ddl" :border="true" style="width: 95%;margin: 0 auto;">
             <el-table-column label="截止时间" width="180">
                 <template #default="scope">
-                    <div style="display: flex; align-items: center">
-                        <span style="margin-left: 10px">{{ scope.row.date.split("T")[0] }}</span>
+                    <div style="display:flex;align-items: center;" :style="{backgroundColor: tableRowClassName(scope.row)}">
+                        <span style="margin-left: 10px;" >{{ scope.row.date.split("T")[0] }}</span>
                     </div>
                 </template>
             </el-table-column>
             <el-table-column label="DDL内容" width="180">
                 <template #default="scope">
-                    <div style="display: flex; align-items: center">
+                    <div style="display: flex; align-items: center" :style="{backgroundColor: tableRowClassName(scope.row)}">
                         <span style="margin-left: 10px">{{ scope.row.ddlContent }}</span>
                     </div>
                 </template>
             </el-table-column>
             <el-table-column label="群聊" width="180">
                 <template #default="scope">
-                    <div style="display: flex; align-items: center">
+                    <div style="display: flex; align-items: center" :style="{backgroundColor: tableRowClassName(scope.row)}">
                         <span style="margin-left: 10px">{{ scope.row.group }}</span>
                     </div>
                 </template>
             </el-table-column>
             <el-table-column label="紧急等级" width="180">
                 <template #default="scope">
-                    <div style="display: flex; align-items: center">
+                    <div style="display: flex; align-items: center" :style="{backgroundColor: tableRowClassName(scope.row)}">
                         <span style="margin-left: 10px">{{ scope.row.rank }}</span>
                     </div>
                 </template>

@@ -80,46 +80,82 @@ const showingMonth = ref(0)
 showingMonth.value = (new Date).getMonth()
 tempDays = (days.value.filter(day => day.month === showingMonth.value))
 
+// function addWhite() {
+//   let tempFrontDay = new Date(tableData.value.ddl[tempDays[0].index])
+//   let frontWhite = []
+//   if (!tempDays[0].weekRank) {
+//     tempFrontDay.setDate(tempFrontDay.getDate() - 1);
+//     frontWhite.unshift(new day(tempFrontDay))
+//     tempFrontDay.setDate(tempFrontDay.getDate() - 1);
+//     while (!frontWhite[0].weekRank) {
+//       frontWhite.unshift(new day(tempFrontDay))
+//       tempFrontDay.setDate(tempFrontDay.getDate() - 1);
+//     }
+//   }
+//   let tempBackDay = new Date(tableData.value.ddl[tempDays[tempDays.length - 1].index])
+//   let backWhite = []
+//   if (tempDays[tempDays.length - 1].weekRank !== 6) {
+//     tempBackDay.setDate(tempBackDay.getDate() + 1);
+//     backWhite.push(new day(tempBackDay))
+//     tempBackDay.setDate(tempBackDay.getDate() + 1);
+//     while (backWhite[backWhite.length - 1].weekRank !== 6) {
+//       backWhite.push(new day(tempBackDay))
+//       tempBackDay.setDate(tempBackDay.getDate() + 1);
+//     }
+//   }
+//   console.log(frontWhite, tempDays, backWhite)
+//   showingDays.value = showingDays.value.concat(frontWhite, tempDays, backWhite)
+//   console.log(showingDays.value)
+// }
+
 function addWhite() {
-  let tempFrontDay = new Date(tableData.value.ddl[tempDays[0].index])
-  let frontWhite = []
+  const tempFrontDay = new Date(tableData.value.ddl[tempDays[0].index]);
+  const tempBackDay = new Date(tableData.value.ddl[tempDays[tempDays.length - 1].index]);
+  const frontWhite = [];
+  const backWhite = [];
+
+  // 添加前置白天
   if (!tempDays[0].weekRank) {
-    tempFrontDay.setDate(tempFrontDay.getDate() - 1);
-    frontWhite.unshift(new day(tempFrontDay))
-    tempFrontDay.setDate(tempFrontDay.getDate() - 1);
-    while (!frontWhite[0].weekRank) {
-      frontWhite.unshift(new day(tempFrontDay))
-      tempFrontDay.setDate(tempFrontDay.getDate() - 1);
+    for (let i = 1; i <= 7; i++) {
+      const temp = new Date(tempFrontDay.getTime() - i * 24 * 60 * 60 * 1000);
+      if (temp.getDay() !== 0) {
+        frontWhite.push(new day(temp));
+      }
+      else {
+        break;
+      }
     }
   }
-  let tempBackDay = new Date(tableData.value.ddl[tempDays[tempDays.length - 1].index])
-  let backWhite = []
+
+  // 添加后置白天
   if (tempDays[tempDays.length - 1].weekRank !== 6) {
-    tempBackDay.setDate(tempBackDay.getDate() + 1);
-    backWhite.push(new day(tempBackDay))
-    tempBackDay.setDate(tempBackDay.getDate() + 1);
-    while (backWhite[backWhite.length - 1].weekRank !== 6) {
-      backWhite.push(new day(tempBackDay))
-      tempBackDay.setDate(tempBackDay.getDate() + 1);
+    for (let i = 1; i <= 7; i++) {
+      const temp = new Date(tempBackDay.getTime() + i * 24 * 60 * 60 * 1000);
+      if (temp.getDay() !== 6) {
+        backWhite.push(new day(temp));
+      }
+      else {
+        break;
+      }
     }
   }
-  console.log(frontWhite, tempDays, backWhite)
-  showingDays.value = showingDays.value.concat(frontWhite, tempDays, backWhite)
-  console.log(showingDays.value)
+
+  showingDays.value = [...frontWhite, ...tempDays, ...backWhite];
 }
+
 addWhite()
 
 </script>
 
 <template>
-  <el-popover placement="right" width="270px" trigger="click">
+  <el-popover placement="left" width="270px" trigger="click">
     <template #reference>
       <el-button style="margin: 40px;right: 260px;position: absolute;top: 70px;" size="large">纵览</el-button>
     </template>
     <div style="width:584px;margin-block:80px;">
       <div>
-        <div :class="CalendarCell" @click="showingMonth--" style="display: inline-block;">&lt;</div>
-        <div :class="CalendarCell" @click="showingMonth++" style="display: inline-block;">></div>
+        <div :class="CalendarCell" @click="tempDays=[];showingDays=[];showingMonth--;" style="display: inline-block;">&lt;</div>
+        <div :class="CalendarCell" @click="tempDays=[];showingDays=[];showingMonth++;" style="display: inline-block;">></div>
       </div>
       <CalendarCell v-for="day in showingDays" :day="day"></CalendarCell>
     </div>
