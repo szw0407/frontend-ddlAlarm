@@ -45,3 +45,4 @@ export function getMsg(){
 
 
 export const msOutLookStatus = ref(false)
+export const msSynchronousStatus = ref(false)
