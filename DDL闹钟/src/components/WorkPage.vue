@@ -6,7 +6,7 @@ import { ElMessageBox, ElLoading } from 'element-plus'
 import MyCalendar from "./MyCalendar.vue"
 import DDLOperations from "./DDLOperations.vue"
 import MyAvatar from "./MyAvatar.vue"
-import { TipMsg, tableData, rank2Class, getMsg } from "./export.js"
+import { TipMsg, tableData, rank2Class, getMsg, msOutLookStatus } from "./export.js"
 
 const emit = defineEmits(["login-status-changed"])
 
@@ -103,6 +103,7 @@ watch(refreshStatus, () => {
                 </template>
             </el-table-column>
         </el-table>
+        <div style="width: 95%;margin: 0 auto;color: green;display: flex;flex-direction: row-reverse;" v-if="msOutLookStatus"><p>√</p></div>
 
     </div>
 </template>

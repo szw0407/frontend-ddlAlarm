@@ -42,3 +42,6 @@ export function getMsg(){
 
         }
 } //test
+
+
+export const msOutLookStatus = ref(false)

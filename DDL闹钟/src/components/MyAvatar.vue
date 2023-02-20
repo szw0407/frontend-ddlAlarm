@@ -2,7 +2,7 @@
 import { ref } from "vue"
 import { ElMessageBox, ElLoading } from 'element-plus'
 
-import { tableData, TipMsg } from "./export.js"
+import { tableData, TipMsg, msOutLookStatus } from "./export.js"
 
 const emits = defineEmits(["signOut", "refreshOn"])
 
@@ -82,6 +82,9 @@ function confrimSettings() {
     <el-dialog v-model="settingWindowVisible" :show-close="false" align-center title="设定">
         <div>
             <p>版本号： V 1.0 alpha</p>
+            <div>
+                <el-checkbox v-model="msOutLookStatus">启用OutLook同步</el-checkbox>
+            </div>
             <p>选择群聊：</p>
             <div v-for="group in groups">
                 <el-checkbox v-model="group.status">{{ group.groupName }}</el-checkbox>
