@@ -4,6 +4,8 @@ import { watch,ref } from "vue"
 import CalendarCell from "./CalendarCell.vue"
 import { tableData, rank2Class } from "./export.js"
 
+const weekDayArr = ref(["日","一","二","三","四","五","六"])
+
 class day {
   constructor(Data) {
     this.month = Data.getMonth()
@@ -21,19 +23,19 @@ const showingDays = ref([])
 
 function* generateDays(start, end) {
   for (let currentDate = new Date(start); currentDate <= end; currentDate.setDate(currentDate.getDate() + 1)) {
-    yield new day(currentDate);
+    yield new day(new Date(currentDate.getTime()));
   }
 }
 
 days.value = [...generateDays(
-  new Date(new Date().setMonth(new Date().getMonth() - 1)).setDate(1),
+  new Date(new Date().setMonth(new Date().getMonth() - 2)).setDate(1),
   new Date(new Date().setMonth(new Date().getMonth() + 2)).setDate(0)
 )];
 
 for (let tableDataIndex in tableData.value.ddl) {
 
   // 找对应的index
-  const dateToFind = new Date(tableData.value.ddl[tableDataIndex].date);
+  const dateToFind = new Date(tableData.value.ddl[Number(tableDataIndex)].date);
   let index = 1
   let tempMonth = dateToFind.getMonth()
   let tempDate = dateToFind.getDate()
@@ -49,10 +51,10 @@ for (let tableDataIndex in tableData.value.ddl) {
   //   dateToFind.setDate(0)
   // }
 
-  days.value[index].index.push(tableDataIndex)
+  days.value[index].index.push(Number(tableDataIndex))
 
   // 根据紧急等级植入颜色
-  switch (rank2Class[tableData.value.ddl[tableDataIndex].rank]) {
+ switch (rank2Class.value[tableData.value.ddl[tableDataIndex].rank]) {
     case "red": days.value[index].color = "red";
       break;
     case "yellow": if (days.value[index].color !== "red") {
@@ -77,6 +79,7 @@ for (let tableDataIndex in tableData.value.ddl) {
 // showDays即单页展示的日子
 
 let tempDays = []
+const TodayMonth = (new Date).getMonth()
 const showingMonth = ref(0)
 showingMonth.value = (new Date).getMonth()
 
@@ -112,7 +115,6 @@ function addWhite() {
   tempDays=[];
   showingDays.value =[];
   tempDays =(days.value.filter(day => day.month === showingMonth.value));
-  console.log(tempDays)
   const tempFrontDay = new Date(tempDays[0].date);
   const tempBackDay = new Date(tempDays[tempDays.length - 1].date);
   const frontWhite = [];
@@ -122,11 +124,15 @@ function addWhite() {
   if (tempDays[0].weekRank) {
     for (let i = 1; i <= 7; i++) {
       let temp = new Date(tempFrontDay.getTime());
+      console.log("First Day Is :",tempFrontDay.getMonth(),"月",tempFrontDay.getDate(),"日")
+      console.log("Final Day Is :",tempBackDay.getMonth(),"月",tempBackDay.getDate(),"日")
       temp.setDate(temp.getDate()-i)
       if (temp.getDay() !== 0) {
+        console.log(temp.getDate()," is No.",temp.getDay())
         frontWhite.unshift((new day(temp)));
       }
       else {
+        frontWhite.unshift((new day(temp)));
         break;
       }
     }
@@ -137,34 +143,58 @@ function addWhite() {
     for (let i = 1; i <= 7; i++) {
       let temp = new Date(tempBackDay.getTime());
       temp.setDate(temp.getDate()+i)
-      if (temp.getDay() === 6) {
+      if (temp.getDay() !== 6) {
+        backWhite.push((new day(temp)));
+      }
+      else {
+        backWhite.push((new day(temp)));
         break;
       }
-      backWhite.push((new day(temp)));
+      
     }
   }
 
   showingDays.value = [...frontWhite, ...tempDays, ...backWhite];
-  console.log(showingDays.value)
-  console.log(frontWhite)
-  console.log(backWhite)
+  // console.log(showingDays.value)
+  // console.log(frontWhite)
+  // console.log(backWhite)
 }
 
 addWhite()
 watch(showingMonth,addWhite)
 
+function toBeforeMonth(){
+  if ( showingMonth.value - TodayMonth === 11 || showingMonth.value === TodayMonth - 1){
+    console.warn("Impermissible Behavior.")
+  }
+  else{
+    showingMonth.value--;
+  }
+}
+
+function toNextMonth(){
+  if ( TodayMonth - showingMonth.value === 11 || showingMonth.value === TodayMonth + 1){
+    console.warn("Impermissible Behavior.")
+  }
+  else{
+    showingMonth.value++;
+  }
+}
+
 </script>
 
 <template>
-  <el-popover placement="left" width="270px" trigger="click">
+  <el-popover placement="left" width="584px" trigger="click">
     <template #reference>
       <el-button style="margin: 40px;right: 260px;position: absolute;top: 70px;" size="large">纵览</el-button>
     </template>
-    <div style="width:584px;margin-block:80px;">
+    <div style="width:584px;margin-block:80px;background-color: white;">
       <div>
-        <div :class="CalendarCell" @click="showingMonth--;" style="display: inline-block;">&lt;</div>
-        <div :class="CalendarCell" @click="showingMonth++;" style="display: inline-block;">></div>
+        <p style="display: inline-block;">{{showingMonth + 1}}</p>
+        <div :class="CalendarCell" @click="toBeforeMonth" style="display: inline-block;">&lt;</div>
+        <div :class="CalendarCell" @click="toNextMonth" style="display: inline-block;">></div>
       </div>
+      <div style="height:80px;width:80px;display: inline-block;" v-for="i in weekDayArr">{{i}}</div>
       <CalendarCell v-for="day in showingDays" :day="day"></CalendarCell>
     </div>
   </el-popover>
