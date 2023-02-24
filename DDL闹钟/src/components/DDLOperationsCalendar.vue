@@ -2,12 +2,12 @@
     <!-- DDL详情弹窗 -->
 
     <!-- 加个v-if限制数据缓存，待施工 -->
-    <el-dialog v-model="showWindowCalendarVisible" show-close="false" align-center title="DDL详情" >
+    <el-dialog v-if="showWindowCalendarVisible" v-model="showWindowCalendarVisible" show-close="false" align-center title="DDL详情" append-to="body" style="z-index: 10000;" >
         <p v-for=" (y, x) in showWindowData "><b>{{ tableArary[x] }}</b> : {{ y }}</p>
     </el-dialog>
 
     <!-- DDL编辑弹窗 -->
-    <el-dialog v-model="editWindowCalendarVisible" :show-close="false" align-center title="修改DDL">
+    <el-dialog v-model="editWindowCalendarVisible" v-if="editWindowCalendarVisible" :show-close="false" align-center title="修改DDL" append-to="body" style="z-index: 10000;">  
         <el-form :model="form">
             <el-form-item label="截止时间" :label-width="formLabelWidth">
                 <el-date-picker v-model="inputEditData.date" type="datetime" placeholder="选择截止时间"

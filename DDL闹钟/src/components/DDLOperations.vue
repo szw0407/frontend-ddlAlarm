@@ -67,12 +67,12 @@ function confrimEdit() {
 
 <template>
     <!-- DDL详情弹窗 -->
-    <el-dialog v-model="showWindowVisible" show-close="false" align-center title="DDL详情" >
+    <el-dialog v-model="showWindowVisible" v-if="showWindowVisible" show-close="false" align-center title="DDL详情" append-to="body">
         <p v-for=" (y, x) in showWindowData "><b>{{ tableArary[x] }}</b> : {{ y }}</p>
     </el-dialog>
 
     <!-- DDL编辑弹窗 -->
-    <el-dialog v-model="editWindowVisible" :show-close="false" align-center title="修改DDL">
+    <el-dialog v-model="editWindowVisible" v-if="editWindowVisible" :show-close="false" align-center title="修改DDL" append-to="body">
         <el-form :model="form">
             <el-form-item label="截止时间" :label-width="formLabelWidth">
                 <el-date-picker v-model="inputEditData.date" type="datetime" placeholder="选择截止时间"
