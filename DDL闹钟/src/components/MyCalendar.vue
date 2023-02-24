@@ -52,6 +52,7 @@ for (let tableDataIndex in tableData.value.ddl) {
   // }
 
   days.value[index].index.push(Number(tableDataIndex))
+  console.log(days)
 
   // 根据紧急等级植入颜色
  switch (rank2Class.value[tableData.value.ddl[tableDataIndex].rank]) {

@@ -5,6 +5,8 @@ export const TipMsg = ref([" 是否确认登出？ ", "正在获取最新ddl信�
 
 export const showWindowVisible = ref(false)
 export const editWindowVisible = ref(false)
+export const showWindowCalendarVisible = ref(false)
+export const editWindowCalendarVisible = ref(false)
 
 export const tableData = ref([])
 export const rank2Class = ref({ "非常紧急": "red", "紧急": "yellow", "不紧急": "green" })
@@ -30,14 +32,14 @@ export function getMsg(){
                     "rank": "紧急", 
                     "src": "经研究，本群决定于2022年2月8日22时12分32秒，与大家一起去保卫萝卜，收到请回复！" 
                 }
-                ,
-                {
-                    "ddlContent": "一起去挖萝卜",  
-                    "date": "2022-03-04T22:12:32",   
-                    "group": "我们喜欢一起去挖萝卜二群",  
-                    "rank": "非常紧急", 
-                    "src": "经研究，本群决定于2022年2月8日22时12分32秒，与大家一起去保卫萝卜，收到请回复！" 
-                }
+                // ,
+                // {
+                //     "ddlContent": "一起去挖萝卜",  
+                //     "date": "2022-03-04T22:12:32",   
+                //     "group": "我们喜欢一起去挖萝卜二群",  
+                //     "rank": "非常紧急", 
+                //     "src": "经研究，本群决定于2022年2月8日22时12分32秒，与大家一起去保卫萝卜，收到请回复！" 
+                // }
             ],
 
         "ddlGroups": 

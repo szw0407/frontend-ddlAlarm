@@ -1,78 +1,13 @@
-<!-- <script setup>
-import { ref } from "vue"
-import { ElMessageBox,ElLoading } from 'element-plus'
-
-import { showWindowVisible, editWindowVisible, tableData, TipMsg } from "./export.js"
-
-const p = defineProps(["index"])
-
-const showWindowData = ref({})
-const editWindowData = ref({"date":null,"ddlContent":null,"rank":null})
-const inputEditData = ref({"date":null,"ddlContent":null,"rank":null})
-
-
-function showItem(index) {
-    showWindowVisible.value = true
-    showWindowData.value = tableData.value.ddl[index]
-}
-function editItem(index) {
-    editWindowVisible.value = true
-    for (a in [editWindowData.value , inputEditData.value]){
-        for (b in [date,ddlContent,rank]){
-            a[b]=tableData.value.ddl[index][b]
-        }
-    }
-}
-function deleteItem(index) {
-    ElMessageBox.confirm(
-        TipMsg.value[5],
-        "删除确认",
-        {
-            confirmButtonText: '确定',
-            cancelButtonText: '取消',
-            type: 'warning',
-        }
-    )
-        .then(
-            (index) => {
-                const loading = ElLoading.service({ fullscreen: true, text: TipMsg.value[6] })
-                pushDelete(index)
-                tableData.value.ddl[index].splice(index, 1)
-                loading.close()
-            }
-        )
-}
-
-
-function confrimEdit() {
-    const loading = ElLoading.service({ fullscreen: true, text: TipMsg.value[3] })
-    if (inputEditData.value === editWindowData.value) {
-        loading.close()
-    } else {
-        pushEditData(inputEditData.value)
-        loading.close()
-    }
-    ElMessageBox.confirm(
-        TipMsg.value[4],
-        "修改成功！",
-        {
-            confirmButtonText: '确定',
-            cancelButtonText: '取消',
-            type: 'warning',
-        }
-    )
-    editWindowVisible.value = false
-}
-</script> -->
-
 <template>
     <!-- DDL详情弹窗 -->
-    <el-dialog v-model="showWindowVisible" show-close="false" align-center title="DDL详情" >
+
+    <!-- 加个v-if限制数据缓存，待施工 -->
+    <el-dialog v-model="showWindowCalendarVisible" show-close="false" align-center title="DDL详情" >
         <p v-for=" (y, x) in showWindowData "><b>{{ tableArary[x] }}</b> : {{ y }}</p>
     </el-dialog>
 
     <!-- DDL编辑弹窗 -->
-    <el-dialog v-model="editWindowVisible" :show-close="false" align-center title="修改DDL">
+    <el-dialog v-model="editWindowCalendarVisible" :show-close="false" align-center title="修改DDL">
         <el-form :model="form">
             <el-form-item label="截止时间" :label-width="formLabelWidth">
                 <el-date-picker v-model="inputEditData.date" type="datetime" placeholder="选择截止时间"
@@ -92,7 +27,7 @@ function confrimEdit() {
         </el-form>
         <template #footer>
             <span class="dialog-footer">
-                <el-button @click="editWindowVisible = false">取消</el-button>
+                <el-button @click="editWindowCalendarVisible = false">取消</el-button>
                 <el-button type="primary" @click="confrimEdit">
                     提交
                 </el-button>
@@ -121,7 +56,7 @@ function confrimEdit() {
 import { ref, defineProps } from "vue";
 import { ElMessageBox, ElLoading } from "element-plus";
 
-import { showWindowVisible, editWindowVisible, tableData, TipMsg } from "./export.js";
+import { showWindowCalendarVisible, editWindowCalendarVisible, tableData, TipMsg } from "./export.js";
 
 const prop = defineProps(["index"]);
 
@@ -132,8 +67,10 @@ const tableArary = ref({ "ddlContent": "DDL内容", "date": "DDL截止日期", "
                          "rank": "紧急等级", "src": "原始信息" })
 
 function showItem(index) {
-  showWindowVisible.value = true
+    console.log(tableData.value.ddl[index])
+  showWindowCalendarVisible.value = true
   showWindowData.value = tableData.value.ddl[index]
+  console.log("here: ",showWindowData.value)
 }
 
 
@@ -145,7 +82,7 @@ function editItem(index) {
   }
   inputEditData.value = { ...item };
   editWindowData.value = { ...item };
-  editWindowVisible.value = true;
+  editWindowCalendarVisible.value = true;
 }
 
 
@@ -181,6 +118,6 @@ function confirmEdit() {
     cancelButtonText: "取消",
     type: "warning",
   });
-  editWindowVisible.value = false;
+  editWindowCalendarVisible.value = false;
 }
 </script>
