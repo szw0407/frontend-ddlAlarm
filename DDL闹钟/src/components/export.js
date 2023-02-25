@@ -5,8 +5,6 @@ export const TipMsg = ref([" 是否确认登出？ ", "正在获取最新ddl信�
 
 export const showWindowVisible = ref(false)
 export const editWindowVisible = ref(false)
-export const showWindowCalendarVisible = ref(false)
-export const editWindowCalendarVisible = ref(false)
 
 export const tableData = ref([])
 export const rank2Class = ref({ "非常紧急": "red", "紧急": "yellow", "不紧急": "green" })
@@ -56,3 +54,8 @@ export function getMsg(){
 
 export const msOutLookStatus = ref(false)
 export const msSynchronousStatus = ref(false)
+
+
+export const showWindowData = ref({});
+export const editWindowData = ref({ date: null, ddlContent: null, rank: null });
+export const inputEditData = ref({ date: null, ddlContent: null, rank: null });

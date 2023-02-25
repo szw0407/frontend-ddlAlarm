@@ -2,7 +2,7 @@
 import { ref, computed } from "vue"
 
 import { cellWidth, openCell } from "./export.js"
-import DDLOperationsCalendar  from "./DDLOperationsCalendar.vue"
+import DDLOperations  from "./DDLOperations.vue"
 
 class day {
   constructor(Data) {
@@ -70,7 +70,7 @@ function consoleFunc(a){
                                 <div class="intextMenu3"><p>{{props.day.show[ddlIndex].rank}}</p></div>
                             </div>
                         </template>
-                                <DDLOperationsCalendar :index="consoleFunc(props.day.index[ddlIndex])" />
+                                <DDLOperations :index="consoleFunc(props.day.index[ddlIndex])" />
                     </el-popover>
                 </div>
             </div>                                                    
