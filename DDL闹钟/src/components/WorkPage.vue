@@ -128,7 +128,7 @@ watch(refreshStatus, () => {
         <el-button style="margin: 40px;position: absolute;right: 140px;top:70px;" size="large"
             @click="refreshStatus = true">刷新</el-button>
         <!-- DDL展示表格 -->
-        <el-table :data="tableData.ddl" :border="true" style="width: 95%;margin: 0 auto;">
+        <el-table :data="tableData.ddl" :border="true" style="width: 95%;margin: 0 auto;color: black;">
             <el-table-column label="截止时间" width="180">
                 <template #default="scope">
                     <div style="display:flex;align-items: center;" :style="{ backgroundColor: tableRowClassName(scope.row) }">
