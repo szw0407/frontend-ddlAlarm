@@ -3,15 +3,15 @@ import { msOutLookAccout, msSynchronousStatus } from "./data"
 
 export const rank2Class = ref({ "非常紧急": "red", "紧急": "yellow", "不紧急": "green" })
 
-export const pushDelete = () =>{
+export const pushDelete = async () =>{
     console.log("delete ok")
 } 
 
-export const pushSettingData = () =>{
+export const pushSettingData = async () =>{
     console.log("setting ok")
 }
 
-export const pushEditData = () => {
+export const pushEditData = async () => {
     console.log("edit ok")
 }
 
@@ -27,28 +27,23 @@ export async function login(account, password) {
   })
 }
 
-export function getQQNumber() {
+export async function  getQQNumber() {
     return 10001
 }
 
-export function msLogin () {
+export async function msLogin () {
     msOutLookAccout.value = "hao123"
     msSynchronousStatus.value = true
 }
 
-export function msLogout () {
+export async function msLogout () {
     msOutLookAccout.value = null
     msSynchronousStatus.value = false
 }
 
 
-export function getMsg(){
+export async function getMsg(){
     return {
-        "userInformation": 
-            {
-                "avatarAddress": "C:\\Users\\1\\Pictures\\Saved Pictures" 
-            }, 
-
         "ddl":   
             [
                 {
