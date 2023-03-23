@@ -88,6 +88,8 @@ import { ElMessageBox, ElLoading } from "element-plus";
 
 import { showWindowVisible, editWindowVisible,inputEditData,showWindowData,editWindowData, tableData, TipMsg } from "./export.js";
 
+import { pushDelete } from "./export.js"
+
 const prop = defineProps(["index"]);
 
 
@@ -104,6 +106,7 @@ function editItem(index) {
     console.error(`Invalid index: ${index}`);
     return;
   }
+
   inputEditData.value = { ...item };
   editWindowData.value = { ...item };
   editWindowVisible.value = true;

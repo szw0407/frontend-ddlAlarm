@@ -4,9 +4,12 @@ import { ElMessageBox, ElLoading } from 'element-plus'
 
 import { tableData, TipMsg, msOutLookStatus } from "./export.js"
 
+import { pushSettingData } from "./export.js"
+
 const emits = defineEmits(["signOut", "refreshOn"])
 
-const userAvatar = ref(tableData.value.userInformation.avatarAddress)
+const userAvatar = ref("https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png")
+
 const groups = tableData.value.ddlGroups
 const settingWindowData = ref(groups)
 const settingWindowVisible = ref(false)
@@ -39,7 +42,7 @@ function confrimSettings() {
     if (groups.value === settingWindowData.value) {
         loading.close()
     } else {
-        //pushSettingData(settingWindowData.value)
+        pushSettingData(settingWindowData.value)
         loading.close()
         emits("refreshOn")
 
@@ -55,6 +58,7 @@ function confrimSettings() {
     )
     settingWindowVisible.value = false
 }
+
 </script>
 
 <template>
