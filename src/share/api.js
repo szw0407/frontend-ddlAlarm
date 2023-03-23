@@ -1,39 +1,45 @@
 import { ref } from "vue"
+import { msOutLookAccout, msSynchronousStatus } from "./data"
 
-export const TipMsg = ref([" 是否确认登出？ ", "正在获取最新ddl信息......", "获取QQ聊天数据失败，请重试。",
-    "正在提交DDL修改数据......", "DDL信息修改成功！", "确认要删除吗？", "正在删除......"])   // 提示语句设置
-
-export const showWindowVisible = ref(false)
-export const editWindowVisible = ref(false)
-
-export const tableData = ref([])
 export const rank2Class = ref({ "非常紧急": "red", "紧急": "yellow", "不紧急": "green" })
-  // work
-
-
-export const cellWidth = ref("80px")
-export const openCell = ref(null)  //mycale
-
-
-export const msOutLookStatus = ref(false)
-export const msSynchronousStatus = ref(false)
-
-
-export const showWindowData = ref({});
-export const editWindowData = ref({ date: null, ddlContent: null, rank: null });
-export const inputEditData = ref({ date: null, ddlContent: null, rank: null });
-
 
 export const pushDelete = () =>{
     console.log("delete ok")
 } 
 
 export const pushSettingData = () =>{
-    console.log("push ok")
+    console.log("setting ok")
 }
 
+export const pushEditData = () => {
+    console.log("edit ok")
+}
 
+export async function login(account, password) {
+  return new Promise(resolve => {
+    setTimeout(() => {
+      if (account === "1" && password === "1") {
+        resolve(true)
+      } else {
+        resolve(false)
+      }
+    }, 2000)
+  })
+}
 
+export function getQQNumber() {
+    return 10001
+}
+
+export function msLogin () {
+    msOutLookAccout.value = "hao123"
+    msSynchronousStatus.value = true
+}
+
+export function msLogout () {
+    msOutLookAccout.value = null
+    msSynchronousStatus.value = false
+}
 
 
 export function getMsg(){
@@ -87,4 +93,4 @@ export function getMsg(){
             ]
 
         }
-} //test
+} 

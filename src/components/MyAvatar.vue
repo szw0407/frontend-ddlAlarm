@@ -1,30 +1,34 @@
 <script setup>
-import { ref } from "vue"
+import { ref, onMounted, computed } from "vue"
 import { ElMessageBox, ElLoading } from 'element-plus'
 
-import { tableData, TipMsg, msOutLookStatus } from "./export.js"
+import { tableData, TipMsg, msOutLookStatus, msOutLookAccout, msSynchronousStatus } from "../share/data"
 
-import { pushSettingData } from "./export.js"
+import { pushSettingData, getQQNumber, msLogin, msLogout } from "../share/api"
 
 const emits = defineEmits(["signOut", "refreshOn"])
 
-const userAvatar = ref("https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png")
+const QQNumber = ref(10001)
+const userAvatar = computed(() => {
+    return "http://q.qlogo.cn/headimg_dl?dst_uin=" + QQNumber.value + "&spec=640&img_type=jpg"
+})
 
+const msOutLookSettingVisible = ref(false)
+const visionVisible = ref(false)
 const groups = tableData.value.ddlGroups
 const settingWindowData = ref(groups)
-const settingWindowVisible = ref(false)
+const groupSettingWindowVisible = ref(false)
 const oneWord = ref("one word get wrong.")
 
+
+// 每日一言
 async function getOneWords() {
-  const response = await fetch('https://v1.hitokoto.cn');
-  const data = await response.json();
-  return data.hitokoto;
+    const response = await fetch('https://v1.hitokoto.cn')
+    const data = await response.json()
+    oneWord.value = data.hitokoto
 }
 
-getOneWords().then((words) => {
-  oneWord.value = words;
-});
-
+//  登出
 function signOut() {
     ElMessageBox.confirm(
         TipMsg.value[0],
@@ -37,7 +41,9 @@ function signOut() {
     )
         .then(() => { emits("signOut") })
 }
-function confrimSettings() {
+
+// 提交后处理
+function confrimGroupSettings() {
     const loading = ElLoading.service({ fullscreen: true, text: TipMsg.value[3] })
     if (groups.value === settingWindowData.value) {
         loading.close()
@@ -48,7 +54,7 @@ function confrimSettings() {
 
     }
     ElMessageBox.confirm(
-        "抓取群聊设定成功！",
+        "群聊抓取状态设定成功！",
         "设定成功！",
         {
             confirmButtonText: '确定',
@@ -56,9 +62,14 @@ function confrimSettings() {
             type: 'warning',
         }
     )
-    settingWindowVisible.value = false
+    groupSettingWindowVisible.value = false
 }
 
+onMounted(() => {
+    getOneWords()
+    QQNumber.value = getQQNumber()
+    console.log(userAvatar.value)
+})
 </script>
 
 <template>
@@ -70,11 +81,19 @@ function confrimSettings() {
         </div>
         <el-popover trigger="click">
             <template #reference>
-                <el-avatar src="userAvatar" style="position: absolute; right: 40px;" :size="100" />
+                <el-avatar :src="userAvatar" style="position: absolute; right: 40px;" :size="100" />
             </template>
             <div :width="75">
-                <div :width="75" style="text-align: center; margin-top: 15px;" @click="settingWindowVisible = true">
+                <div :width="75" style="text-align: center; margin-top: 15px;" @click="groupSettingWindowVisible = true">
                     设定</div>
+                <el-divider />
+                <div :width="75" style="text-align: center; margin-bottom: 15px;" @click="msOutLookSettingVisible = true">
+                    OutLook
+                </div>
+                <el-divider />
+                <div :width="75" style="text-align: center; margin-bottom: 15px;" @click="visionVisible = true">
+                    版本信息
+                </div>
                 <el-divider />
                 <div :width="75" style="text-align: center; margin-bottom: 15px;" @click="signOut">
                     退出登录
@@ -83,12 +102,8 @@ function confrimSettings() {
         </el-popover>
     </div>
 
-    <el-dialog v-model="settingWindowVisible" :show-close="false" align-center title="设定">
+    <el-dialog v-model="groupSettingWindowVisible" :show-close="false" align-center title="抓取群聊设定">
         <div>
-            <p>版本号： V 1.0 alpha</p>
-            <div>
-                <el-checkbox v-model="msOutLookStatus">启用OutLook同步</el-checkbox>
-            </div>
             <p>选择群聊：</p>
             <div v-for="group in groups">
                 <el-checkbox v-model="group.status">{{ group.groupName }}</el-checkbox>
@@ -96,12 +111,38 @@ function confrimSettings() {
         </div>
         <template #footer>
             <span class="dialog-footer">
-                <el-button @click="settingWindowVisible = false">取消</el-button>
-                <el-button type="primary" @click="confrimSettings">
+                <el-button @click="groupSettingWindowVisible = false">取消</el-button>
+                <el-button type="primary" @click="confrimGroupSettings">
                     提交
                 </el-button>
             </span>
         </template>
+    </el-dialog>
+
+    <el-dialog v-model="msOutLookSettingVisible" :show-close="false" align-center title="OutLook设定">
+        <p>OutLook 状态：</p>
+        <div>
+            <el-checkbox v-model="msOutLookStatus">启用OutLook同步</el-checkbox>
+        </div>
+        <div v-if="msOutLookStatus">
+            <template v-if="msSynchronousStatus">
+                <span mx-sm>
+                    <span text="gray xs">{{ '登录账户： ' }}</span>
+                    <span>
+                        {{ msOutLookAccout }}
+                    </span>
+                </span>
+                <ElButton link type="danger" @click="msLogout">登出</ElButton>
+            </template>
+            <ElButton v-else link type="primary" @click="msLogin">
+                登录
+            </ElButton>
+        </div>
+    </el-dialog>
+
+    <el-dialog v-model="visionVisible" :show-close="false" align-center title="版本信息">
+        <p>版本号： V 1.0 alpha</p>
+        <p>仅供学习交流使用，下载24小时后应当卸载。</p>
     </el-dialog>
 </template>
 

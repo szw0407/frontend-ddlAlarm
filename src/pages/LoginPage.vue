@@ -1,34 +1,19 @@
 <script setup>
 import { ref } from "vue"
-import { ElMessageBox, ElLoading } from 'element-plus'
-import { tableData,getMsg } from "./export";
+
+import { login } from "../share/api"
+import { TipMsg } from "../share/data"; 
 
 const emit = defineEmits(["login-status-changed"])
-
-const TipMsg = ref([
-  "登录失败，请检查输入的账号和密码是否正确及是否启用了相关安全设置，或点击按钮再次进行登录尝试！",
-  "正在尝试登录......"
-]) // 提示语句设置
 
 const account = ref(null)
 const password = ref(null)
 
-async function login(account, password) {
-  tableData.value = getMsg()
-  return new Promise(resolve => {
-    setTimeout(() => {
-      if (account === "1" && password === "1") {
-        resolve(true)
-      } else {
-        resolve(false)
-      }
-    }, 2000)
-  })
-}
+
 
 async function loginTry() {
   const loading = ElLoading.service({
-    text: TipMsg.value[1]
+    text: TipMsg.value[8]
   })
   try {
     const loginTryCallback = await login(account.value, password.value)
@@ -39,7 +24,7 @@ async function loginTry() {
       }, 2000)
     } else {
       loading.close()
-      const confirm = await ElMessageBox.confirm(TipMsg.value[0], "登陆尝试失败", {
+      const confirm = await ElMessageBox.confirm(TipMsg.value[7], "登陆尝试失败", {
         confirmButtonText: "再次登录",
         cancelButtonText: "取消",
         type: "warning"

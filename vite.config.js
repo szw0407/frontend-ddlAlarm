@@ -1,7 +1,11 @@
 import { fileURLToPath, URL } from 'node:url'
 
 import { defineConfig } from 'vite'
+import UnoCSS from 'unocss/vite'
 import vue from '@vitejs/plugin-vue'
+import presetUno from '@unocss/preset-uno'
+import presetAttributify from '@unocss/preset-attributify'
+import {presetTypography} from "unocss"
 import AutoImport from 'unplugin-auto-import/vite'
 import Components from 'unplugin-vue-components/vite'
 import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
@@ -13,7 +17,12 @@ export default defineConfig({
   }),
   Components({
     resolvers: [ElementPlusResolver()],
-  })],
+  }),
+  UnoCSS({presets: [
+    presetUno(),
+    presetAttributify(),
+    presetTypography(),
+  ],}),],
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url))

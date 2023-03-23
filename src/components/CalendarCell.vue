@@ -1,29 +1,24 @@
 <script setup>
 import { ref, computed } from "vue"
 
-import { cellWidth, openCell } from "./export.js"
-import DDLOperations  from "./DDLOperations.vue"
+import { cellWidth, openCell } from "../share/data"
 
-class day {
-  constructor(Data) {
-    this.month = Data.getMonth()
-    this.day = Data.getDate()
-    this.color = "white" //Data.color
-    this.weekRank = Data.getDay()
-    this.show = [] //Data.information
-    this.index = []
-    this.date = Data
-  }
-}
+import DDLOperations  from "./DDLOperations.vue"
 
 const props = defineProps(["day"])
 
-const cell = ref(null)
-const showCell = ref(null)
+
+
+const cell = ref(null)  // 对应单元格的引用
+
+
+
+//  动态调整单元格激活状态，控制收放
 const thisCellStatus = computed(() => {
     return openCell.value === props.day
 })
 
+//  激活单元格后展开单元格
 function clickEvent(number) {
     if (props.day.color !== "white") {
         if (!thisCellStatus.value) {
@@ -36,20 +31,11 @@ function clickEvent(number) {
     }
 }
 
-function returnClassName(day){
-    console.log(day.color)
-    return day.color
-}
-
-function consoleFunc(a){
-    console.log(a)
-    return a
-}
 </script>
 
 <template>
     <div style="display:inline-block;" @click="clickEvent(props.day.weekRank)">
-        <div :style="{backgroundColor: returnClassName(props.day)}" ref="cell" 
+        <div :style="{backgroundColor: props.day.color}" ref="cell" 
         style="height:80px;width:80px;align-items: center;justify-content: center;">
             <p class="cellContent"> {{ props.day.day }} </p>
         </div>
@@ -70,7 +56,7 @@ function consoleFunc(a){
                                 <div class="intextMenu3"><p>{{props.day.show[ddlIndex].rank}}</p></div>
                             </div>
                         </template>
-                                <DDLOperations :index="consoleFunc(props.day.index[ddlIndex])" />
+                                <DDLOperations :index="props.day.index[ddlIndex]" />
                     </el-popover>
                 </div>
             </div>                                                    

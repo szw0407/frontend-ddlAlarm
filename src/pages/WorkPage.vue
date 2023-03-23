@@ -1,22 +1,41 @@
 <script setup>
 import { ref, watch } from "vue"
-import { throttle } from "lodash"
-import { ElMessageBox, ElLoading } from 'element-plus'
 
-import MyCalendar from "./MyCalendar.vue"
-import DDLOperations from "./DDLOperations.vue"
-import MyAvatar from "./MyAvatar.vue"
+import MyCalendar from "../components/MyCalendar.vue"
+import DDLOperations from "../components/DDLOperations.vue"
+import MyAvatar from "../components/MyAvatar.vue"
+
 import { TipMsg, tableData,showWindowVisible, editWindowVisible,
-        showWindowData,editWindowData,inputEditData,rank2Class, getMsg, 
-        msSynchronousStatus, msOutLookStatus } from "./export.js"
+        showWindowData,editWindowData,inputEditData, 
+        msSynchronousStatus, msOutLookStatus } from "../share/data"
+
+import { pushEditData,getMsg,rank2Class,  } from "../share/api"
 
 const emit = defineEmits(["login-status-changed"])
+
+
+
 
 const tableArary = ref({ "ddlContent": "DDL内容", "date": "DDL截止日期", "group": "DDL发布群聊",
                          "rank": "紧急等级", "src": "原始信息" })                         
 
 const refreshStatus = ref(true)
-refresh()
+
+
+
+
+async function refresh() {
+    const loading = ElLoading.service({ text: TipMsg.value[1] })
+    const data = getMsg()
+    if (!!data) {
+        loading.close()
+        tableData.value = data
+        refreshStatus.value = false
+    } else {
+        loading.close()
+        await confirmRetry()
+    }
+}
 
 function confirmEdit() {
   const loading = ElLoading.service({
@@ -37,19 +56,6 @@ function confirmEdit() {
   editWindowVisible.value = false;
 }
 
-async function refresh() {
-    const loading = ElLoading.service({ text: TipMsg.value[1] })
-    const data = getMsg()
-    if (!!data) {
-        loading.close()
-        tableData.value = data
-        refreshStatus.value = false
-    } else {
-        loading.close()
-        await confirmRetry()
-    }
-}
-
 async function confirmRetry() {
     const confirm = await ElMessageBox.confirm('数据获取失败', TipMsg.value[2], {
         confirmButtonText: '再次获取',
@@ -58,6 +64,7 @@ async function confirmRetry() {
     })
     if (confirm === "confirm") await refresh()
 }
+
 function signout() {
     ElMessageBox.confirm(
         TipMsg.value[0],
@@ -71,13 +78,14 @@ function signout() {
         .then(emit("login-status-changed"))
 }
 
-function tableRowClassName(row) {
-    return rank2Class.value[row.rank]
-}
+
+
+refresh()
 
 watch(refreshStatus, () => {
     refresh();
 })
+
 </script>
 
 <template>
@@ -131,7 +139,7 @@ watch(refreshStatus, () => {
         <el-table :data="tableData.ddl" :border="true" style="width: 95%;margin: 0 auto;color: black;">
             <el-table-column label="截止时间" width="180">
                 <template #default="scope">
-                    <div style="display:flex;align-items: center;" :style="{ backgroundColor: tableRowClassName(scope.row) }">
+                    <div style="display:flex;align-items: center;" :style="{ backgroundColor: rank2Class[scope.row.rank] }">
                         <span style="margin-left: 10px;">{{ scope.row.date.split("T")[0] }}</span>
                     </div>
                 </template>
@@ -139,7 +147,7 @@ watch(refreshStatus, () => {
             <el-table-column label="DDL内容" width="180">
                 <template #default="scope">
                     <div style="display: flex; align-items: center"
-                        :style="{ backgroundColor: tableRowClassName(scope.row) }">
+                        :style="{ backgroundColor: rank2Class[scope.row.rank] }">
                         <span style="margin-left: 10px">{{ scope.row.ddlContent }}</span>
                     </div>
                 </template>
@@ -147,7 +155,7 @@ watch(refreshStatus, () => {
             <el-table-column label="群聊" width="180">
                 <template #default="scope">
                     <div style="display: flex; align-items: center"
-                        :style="{ backgroundColor: tableRowClassName(scope.row) }">
+                        :style="{ backgroundColor: rank2Class[scope.row.rank] }">
                         <span style="margin-left: 10px">{{ scope.row.group }}</span>
                     </div>
                 </template>
@@ -155,7 +163,7 @@ watch(refreshStatus, () => {
             <el-table-column label="紧急等级" width="180">
                 <template #default="scope">
                     <div style="display: flex; align-items: center"
-                        :style="{ backgroundColor: tableRowClassName(scope.row) }">
+                        :style="{ backgroundColor: rank2Class[scope.row.rank] }">
                         <span style="margin-left: 10px">{{ scope.row.rank }}</span>
                     </div>
                 </template>
