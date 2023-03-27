@@ -7,7 +7,7 @@ import MyAvatar from "../components/MyAvatar.vue"
 
 import { TipMsg, tableData,showWindowVisible, editWindowVisible,
         showWindowData,editWindowData,inputEditData, 
-        msSynchronousStatus,msAliagnStatus, msOutLookStatus,refreshStatus } from "../share/data"
+        msAliagnStatus, msOutLookStatus,refreshStatus } from "../share/data"
 
 import { pushEditData,getMsg,rank2Class,  } from "../share/api"
 
@@ -186,8 +186,8 @@ watch(refreshStatus, () => {
             </el-table-column>
         </el-table>
         <div style="width: 95%;margin: 0 auto;display: flex;flex-direction: row-reverse;" v-if="msOutLookStatus">
-            <p style="color: red;" v-if="!msSynchronousStatus">X</p>
-            <p style="color: green;" v-if="msSynchronousStatus">√</p>
+            <p style="color: red;" v-if="!msAliagnStatus">X</p>
+            <p style="color: green;" v-if="msAliagnStatus">√</p>
         </div>
 
     </div>
