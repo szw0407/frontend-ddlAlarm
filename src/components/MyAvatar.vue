@@ -2,13 +2,12 @@
 import { ref, onMounted, computed } from "vue"
 import { ElMessageBox, ElLoading } from 'element-plus'
 
-import { tableData, TipMsg, msOutLookStatus, msOutLookAccout, msSynchronousStatus } from "../share/data"
+import { tableData, TipMsg, msOutLookStatus, msOutLookAccout, msSynchronousStatus, msAliagnStatus, msLoginLink, QQNumber } from "../share/data"
 
-import { pushSettingData, getQQNumber, msLogin, msLogout } from "../share/api"
+import { pushSettingData, msLogin, msLogout, msAliagn } from "../share/api"
 
 const emits = defineEmits(["signOut", "refreshOn"])
 
-const QQNumber = ref(10001)
 const userAvatar = computed(() => {
     return "http://q.qlogo.cn/headimg_dl?dst_uin=" + QQNumber.value + "&spec=640&img_type=jpg"
 })
@@ -48,26 +47,37 @@ function confrimGroupSettings() {
     if (groups.value === settingWindowData.value) {
         loading.close()
     } else {
+        console.log(settingWindowData.value)
         pushSettingData(settingWindowData.value)
-        loading.close()
-        emits("refreshOn")
+            .catch(() => {
+                ElMessageBox.alert("群聊抓取状态设定失败！", "设定失败", {
+                    confirmButtonText: "确定",
+                    type: "error",
+                })
+                loading.close()
+            })
+            .then(() => {
+                ElMessageBox.confirm(
+                    "群聊抓取状态设定成功！",
+                    "设定成功！",
+                    {
+                        confirmButtonText: '确定',
+                        cancelButtonText: '取消',
+                        type: 'warning',
+                    }
+                )
+                emits("refreshOn")
+            })
+            .finally(() => {
+                loading.close()
+            })
 
     }
-    ElMessageBox.confirm(
-        "群聊抓取状态设定成功！",
-        "设定成功！",
-        {
-            confirmButtonText: '确定',
-            cancelButtonText: '取消',
-            type: 'warning',
-        }
-    )
     groupSettingWindowVisible.value = false
 }
 
 onMounted(() => {
     getOneWords()
-    QQNumber.value = getQQNumber()
     console.log(userAvatar.value)
 })
 </script>
@@ -133,9 +143,10 @@ onMounted(() => {
                     </span>
                 </span>
                 <ElButton link type="danger" @click="msLogout">登出</ElButton>
+                <ElButton link type="danger" @click="msAliagn">同步</ElButton>
             </template>
             <ElButton v-else link type="primary" @click="msLogin">
-                登录
+                <a :href="msLoginLink" target="_blank">登录</a>
             </ElButton>
         </div>
     </el-dialog>

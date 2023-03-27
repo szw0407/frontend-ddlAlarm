@@ -7,7 +7,7 @@ import MyAvatar from "../components/MyAvatar.vue"
 
 import { TipMsg, tableData,showWindowVisible, editWindowVisible,
         showWindowData,editWindowData,inputEditData, 
-        msSynchronousStatus, msOutLookStatus } from "../share/data"
+        msSynchronousStatus,msAliagnStatus, msOutLookStatus,refreshStatus } from "../share/data"
 
 import { pushEditData,getMsg,rank2Class,  } from "../share/api"
 
@@ -19,7 +19,6 @@ const emit = defineEmits(["login-status-changed"])
 const tableArary = ref({ "ddlContent": "DDL内容", "date": "DDL截止日期", "group": "DDL发布群聊",
                          "rank": "紧急等级", "src": "原始信息" })                         
 
-const refreshStatus = ref(true)
 
 
 
@@ -37,7 +36,7 @@ async function refresh() {
     }
 }
 
-function confirmEdit() {
+async function confirmEdit() {
   const loading = ElLoading.service({
     fullscreen: true,
     text: TipMsg.value[3],
@@ -45,8 +44,19 @@ function confirmEdit() {
   if (JSON.stringify(inputEditData.value) === JSON.stringify(editWindowData.value)) {
     loading.close();
   } else {
-    pushEditData(inputEditData.value);
-    loading.close();
+    console.log(inputEditData.value);
+    await pushEditData(inputEditData.value)
+    .catch((err) => {
+      console.error(err);
+      ElMessageBox.alert("ddl信息修改失败！", "修改失败", {
+        confirmButtonText: "确定",
+        type: "error",
+      })
+    .then(() => {refreshStatus.value = true})
+    loading.close()
+    return
+    })
+    loading.close()
   }
   ElMessageBox.confirm(TipMsg.value[4], "修改成功！", {
     confirmButtonText: "确定",

@@ -16,7 +16,7 @@ async function loginTry() {
     text: TipMsg.value[8]
   })
   try {
-    const loginTryCallback = await login(account.value, password.value)
+    const loginTryCallback = await login()
     if (loginTryCallback) {
       setTimeout(() => {
         loading.close()
@@ -35,6 +35,7 @@ async function loginTry() {
     }
   } catch (error) {
     console.error(error)
+    loading.close()
   }
 }
 
@@ -44,14 +45,14 @@ async function loginTry() {
   <div id="loginPage">
     <el-form id="form">
       <h1 id="title">DDL闹钟</h1>
-      <span class="label">
+      <!-- <span class="label">
         <h2 class="label-init">账户：</h2>
       </span>
       <input class="inputArea" v-model="account" maxlength="10" />
       <span class="label">
         <h2 class="label-init">密码：</h2>
       </span>
-      <input class="inputArea" v-model="password" type="password" show-password maxlength="15" />
+      <input class="inputArea" v-model="password" type="password" show-password maxlength="15" /> -->
       <div id="loginButton" @click="loginTry">登录</div>
     </el-form>
   </div>
@@ -72,7 +73,7 @@ async function loginTry() {
   margin: 0 auto;
 }
 
-.inputArea {
+/* .inputArea {
   width: 100%;
   height: 45px;
   margin: 20px;
@@ -80,7 +81,7 @@ async function loginTry() {
   line-height: 25px;
   font-size: 19px;
   text-indent: 15px;
-}
+} */
 
 #loginButton {
   width: 125px;
@@ -95,7 +96,7 @@ async function loginTry() {
 }
 
 #title {
-  margin-left: 38%;
+  margin-left: 32%;
   margin-top: 20%;
 }
 

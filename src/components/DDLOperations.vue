@@ -3,7 +3,7 @@ import { defineProps } from "vue";
 import { ElMessageBox, ElLoading } from "element-plus";
 
 import { showWindowVisible, editWindowVisible,inputEditData,
-         showWindowData,editWindowData, tableData, TipMsg } from "../share/data";
+         showWindowData,editWindowData, tableData, TipMsg, refreshStatus } from "../share/data";
 
 import { pushDelete } from "../share/api"
 
@@ -19,7 +19,7 @@ function editItem(index) {
   const item = tableData.value.ddl[index];
   if (!item) {
     console.error(`Invalid index: ${index}`);
-    return;
+    return
   }
 
   inputEditData.value = { ...item };
@@ -37,9 +37,9 @@ function deleteItem(index) {
       fullscreen: true,
       text: TipMsg.value[6],
     });
-    pushDelete(index);
-    tableData.value.ddl.splice(index, 1);
-    loading.close();
+    pushDelete(index)
+    refreshStatus.value = true
+    loading.close()
   });
 }
 </script>
