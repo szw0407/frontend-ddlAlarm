@@ -83,10 +83,10 @@ export const pushEditData = async (input) => {
 const getLoginInfo = async () => {
     await http.get('./login_info/')
         .then((res) => {
-            if (res.data.QQinfo.user_id === undefined) {
+            if (!(user_id  in res.data.QQinfo)) {
                 return [{ data: null, status: false }, { data: null, status: false }]
             }
-            else if (res.data.MsUserInfo.userPrincipalName === undefined) {
+            else if (!(userPrincipalName in res.data.MsUserInfo)) {
                 return [{ data: res.data.QQinfo.user_id, status: true }, { data: res.data.MsUserInfo.LoginMSURL, status: false }]
             }
             else {
