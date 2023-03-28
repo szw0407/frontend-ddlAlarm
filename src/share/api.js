@@ -81,13 +81,13 @@ export const pushEditData = async (input) => {
 
 
 const getLoginInfo = async () => {
-    await http.get('./login_info/')
+    return await http.get('./login_info/')
         .then((res) => {
-            if (!("user_id"  in res.data.QQinfo)) {
+            if (!("user_id" in res.data.QQinfo)) {
                 return [{ data: null, status: false }, { data: null, status: false }]
             }
-            else if (!("userPrincipalName" in res.data.MsUserInfo)) {
-                return [{ data: res.data.QQinfo.user_id, status: true }, { data: res.data.MsUserInfo.LoginMSURL, status: false }]
+            else if (!("MsUserInfo" in res.data)) {
+                return [{ data: res.data.QQinfo.user_id, status: true }, { data: res.data.LoginMSURL, status: false }]
             }
             else {
                 return [{ data: res.data.QQinfo.user_id, status: true }, { data: res.data.MsUserInfo.userPrincipalName, status: true }]
@@ -120,7 +120,7 @@ export async function login() {
         return true
     }
     else {
-        return res[0]
+        return res
     }
 }
 
@@ -131,24 +131,34 @@ export function msLoginStatusChange(account) {
 }
 
 export async function msLogin() {
-    let j = 20
-    const loading = ElLoading.service({ fullscreen: true, text: "正在尝试登录OutLook......" })
-    for (i in range(j)) {
-        await sleep(100)
-        let a = await getLoginInfo()
-        if (a[1].status) {
-            loading.close()
-            msLoginStatusChange(a[1].data)
-            return
+    ElMessageBox.confirm(
+        "是否已登录微软账号？",
+        "登录确定",
+        {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning',
         }
-    }
-    loading.close()
-    ElMessageBox.confirm("登录OutLook失败，请重试！", "登录失败！", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning",
-    })
-    return
+    )
+        .then(() => {
+            try {
+                let a = getLoginInfo()
+                msLoginStatusChange(a[1].data)
+                return
+            }
+            catch {
+                ElMessageBox.confirm(
+                    "登录失败，请重试！",
+                    "失败",
+                    {
+                        confirmButtonText: '确定',
+                        cancelButtonText: '取消',
+                        type: 'warning',
+                    }
+                )
+            }
+        }
+        )
 }
 
 export async function msLogout() {
@@ -160,46 +170,46 @@ export async function msAliagn() {
     const loading = ElLoading.service({ fullscreen: true, text: "正在同步数据......" })
     for (i in tableData.value.ddl) {
         let j = (new Date(i.date)).setDate(new Date(i.date).getDate() + 1)
-        await http.post('./MSCalendar',{
-            data:{
-                "subject":i.ddlContent,
+        await http.post('./MSCalendar', {
+            data: {
+                "subject": i.ddlContent,
                 "body": {
-                  "contentType": "HTML",
-                  "content": ""
+                    "contentType": "HTML",
+                    "content": ""
                 },
                 "start": {
-                  "dateTime": i.date.slice(0,11) + "00:00:00",
-                  "timeZone": "China Standard Time"
+                    "dateTime": i.date.slice(0, 11) + "00:00:00",
+                    "timeZone": "China Standard Time"
                 },
                 "end": {
-                  "dateTime": j.toJSON().slice(0,11) + "00:00:00",
-                  "timeZone": "China Standard Time"
+                    "dateTime": j.toJSON().slice(0, 11) + "00:00:00",
+                    "timeZone": "China Standard Time"
                 },
                 "location": {
-                  "displayName": "string"
+                    "displayName": "string"
                 },
                 "isReminderOn": true,
                 "reminderMinutesBeforeStart": 0,
                 "attendees": [
-                  {
-                    "emailAddress": {
-                      "address": "string",
-                      "name": "string"
-                    },
-                    "type": "required"
-                  }
+                    {
+                        "emailAddress": {
+                            "address": "string",
+                            "name": "string"
+                        },
+                        "type": "required"
+                    }
                 ],
                 "allowNewTimeProposals": true,
                 "isAllDay": true,
                 "transactionId": "string"
-              }
+            }
         })
-        .catch((err)=>{
-            console.log(err)
-            loading.close()
-            alert("同步失败，请重试！")
-            return
-        })
+            .catch((err) => {
+                console.log(err)
+                loading.close()
+                alert("同步失败，请重试！")
+                return
+            })
     }
     loading.close()
     msAliagnStatus.value = true
@@ -218,10 +228,13 @@ export async function msAliagn() {
 
 export async function getMsg() {
 
-    const msg = ref()
+    const msg = ref({})
     await http.get('./ddls/')
         .then((res) => {
             msg.value.ddl = res.data.DDL.map(i => {
+                if (!i.from_group_info_all[0].is_active) {
+                    return null
+                }
                 return {
                     id: i.id,
                     ddlContent: i.description.slice(0, 10) + "...",
@@ -248,8 +261,70 @@ export async function getMsg() {
                 }
             })
         })
+         .catch((err) => {
+                   console.log(err)
+})
 
     addRankAtrr(msg.value.ddl)
+    console.log(msg.value)
     return msg.value
 
 } 
+
+
+
+// export async function getMsg() {
+
+//     const msg = ref({
+//         "ddl":
+//             [
+//                 {
+//                     "ddlContent": "一起去保卫萝卜",
+//                     "date": "2022-02-08T22:12:32",
+//                     "group": "保卫萝卜二群",
+//                     "src": "经研究，本群决定于2022年2月8日22时12分32秒，与大家一起去保卫萝卜，收到请回复！"
+//                 }
+//                 ,
+//                 {
+//                     "ddlContent": "一起去挖萝卜",
+//                     "date": "2022-02-08T22:12:32",
+//                     "group": "我们喜欢一起去挖萝卜二群",
+//                     "src": "经研究，本群决定于2022年2月8日22时12分32秒，与大家一起去保卫萝卜，收到请回复！"
+//                 }
+//                 ,
+//                 {
+//                     "ddlContent": "一起去吃萝卜",
+//                     "date": "2022-03-04T22:12:32",
+//                     "group": "大快朵颐萝卜二群",
+//                     "src": "经研究，本群决定于2022年2月8日22时12分32秒，与大家一起去保卫萝卜，收到请回复！"
+//                 }
+//                 ,
+//                 {
+//                     "ddlContent": "一起去埋了萝卜",
+//                     "date": "2022-03-04T22:12:32",
+//                     "group": "萝卜后事料理委员会二群",
+//                     "src": "经研究，本群决定于2022年2月8日22时12分32秒，与大家一起去保卫萝卜，收到请回复！"
+//                 }
+//             ],
+//         "ddlGroups": 
+//             [
+//                 {  
+//                     "groupName": "保卫萝卜二群", 
+//                     "status": true
+//                 }, 
+//                 {  
+//                     "groupName": "保卫萝卜二群", 
+//                     "status": true
+//                 }, 
+//                 {  
+//                     "groupName": "保卫萝卜二群", 
+//                     "status": true
+//                 }, 
+//             ]
+//     })
+
+
+
+//     addRankAtrr(msg.value.ddl)
+//     return msg.value
+// }

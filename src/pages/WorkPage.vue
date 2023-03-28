@@ -5,19 +5,23 @@ import MyCalendar from "../components/MyCalendar.vue"
 import DDLOperations from "../components/DDLOperations.vue"
 import MyAvatar from "../components/MyAvatar.vue"
 
-import { TipMsg, tableData,showWindowVisible, editWindowVisible,
-        showWindowData,editWindowData,inputEditData, 
-        msAliagnStatus, msOutLookStatus,refreshStatus } from "../share/data"
+import {
+    TipMsg, tableData, showWindowVisible, editWindowVisible,
+    showWindowData, editWindowData, inputEditData,
+    msAliagnStatus, msOutLookStatus, refreshStatus
+} from "../share/data"
 
-import { pushEditData,getMsg,rank2Class,  } from "../share/api"
+import { pushEditData, getMsg, rank2Class, } from "../share/api"
 
 const emit = defineEmits(["login-status-changed"])
 
 
 
 
-const tableArary = ref({ "ddlContent": "DDL内容", "date": "DDL截止日期", "group": "DDL发布群聊",
-                         "rank": "紧急等级", "src": "原始信息" })                         
+const tableArary = ref({
+    "ddlContent": "DDL内容", "date": "DDL截止日期", "group": "DDL发布群聊",
+    "rank": "紧急等级", "src": "原始信息"
+})
 
 
 
@@ -25,7 +29,7 @@ const tableArary = ref({ "ddlContent": "DDL内容", "date": "DDL截止日期", "
 
 async function refresh() {
     const loading = ElLoading.service({ text: TipMsg.value[1] })
-    const data = getMsg()
+    const data = await getMsg()
     if (!!data) {
         loading.close()
         tableData.value = data
@@ -37,32 +41,34 @@ async function refresh() {
 }
 
 async function confirmEdit() {
-  const loading = ElLoading.service({
-    fullscreen: true,
-    text: TipMsg.value[3],
-  });
-  if (JSON.stringify(inputEditData.value) === JSON.stringify(editWindowData.value)) {
-    loading.close();
-  } else {
-    await pushEditData(inputEditData.value)
-    .catch((err) => {
-      console.error(err);
-      ElMessageBox.alert("ddl信息修改失败！", "修改失败", {
-        confirmButtonText: "确定",
-        type: "error",
-      })
-    .then(() => {refreshStatus.value = true})
-    loading.close()
-    return
+    const loading = ElLoading.service({
+        fullscreen: true,
+        text: TipMsg.value[3],
     })
-    loading.close()
-  }
-  ElMessageBox.confirm(TipMsg.value[4], "修改成功！", {
-    confirmButtonText: "确定",
-    cancelButtonText: "取消",
-    type: "warning",
-  });
-  editWindowVisible.value = false;
+    if (JSON.stringify(inputEditData.value) === JSON.stringify(editWindowData.value)) {
+        loading.close();
+    } else {
+        await pushEditData(inputEditData.value)
+            .then(() => {
+                ElMessageBox.confirm(TipMsg.value[4], "修改成功！", {
+                    confirmButtonText: "确定",
+                    cancelButtonText: "取消",
+                    type: "warning",
+                })
+                refreshStatus.value = true
+            })
+            .catch((err) => {
+                console.error(err);
+                ElMessageBox.alert("ddl信息修改失败！", "修改失败", {
+                    confirmButtonText: "确定",
+                    type: "error",
+                })
+                loading.close()
+            })
+
+        loading.close()
+    }
+    editWindowVisible.value = false;
 }
 
 async function confirmRetry() {
@@ -202,4 +208,5 @@ watch(refreshStatus, () => {
 
 .yellow {
     background-color: yellow;
-}</style>
+}
+</style>

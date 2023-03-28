@@ -8,13 +8,14 @@ import { pushSettingData, msLogin, msLogout, msAliagn } from "../share/api"
 
 const emits = defineEmits(["signOut", "refreshOn"])
 
+
 const userAvatar = computed(() => {
     return "http://q.qlogo.cn/headimg_dl?dst_uin=" + QQNumber.value + "&spec=640&img_type=jpg"
 })
 
 const msOutLookSettingVisible = ref(false)
 const visionVisible = ref(false)
-const groups = tableData.value.ddlGroups
+const groups = ref()
 const settingWindowData = ref(groups)
 const groupSettingWindowVisible = ref(false)
 const oneWord = ref("one word get wrong.")
@@ -75,6 +76,13 @@ function confrimGroupSettings() {
     groupSettingWindowVisible.value = false
 }
 
+function openGroupsSetting () {
+    console.log(tableData.value)
+    groups.value = tableData.value.ddlGroups
+    groupSettingWindowVisible.value = true
+    console.log(tableData.value)
+}
+
 onMounted(() => {
     getOneWords()
 })
@@ -92,7 +100,7 @@ onMounted(() => {
                 <el-avatar :src="userAvatar" style="position: absolute; right: 40px;" :size="100" />
             </template>
             <div :width="75">
-                <div :width="75" style="text-align: center; margin-top: 15px;" @click="groupSettingWindowVisible = true">
+                <div :width="75" style="text-align: center; margin-top: 15px;" @click="openGroupsSetting">
                     设定</div>
                 <el-divider />
                 <div :width="75" style="text-align: center; margin-bottom: 15px;" @click="msOutLookSettingVisible = true">
