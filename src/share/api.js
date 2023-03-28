@@ -81,7 +81,7 @@ export const pushEditData = async (input) => {
 
 
 const getLoginInfo = async () => {
-    await http.get('./login_info')
+    await http.get('./login_info/')
         .then((res) => {
             if (res.QQinfo.user_id === undefined) {
                 return [{ data: null, status: false }, { data: null, status: false }]
@@ -219,7 +219,7 @@ export async function msAliagn() {
 export async function getMsg() {
 
     const msg = ref()
-    await http.get('./ddls')
+    await http.get('./ddls/')
         .then((res) => {
             msg.value.ddl = res.DDL.map(i => {
                 return {
@@ -236,7 +236,7 @@ export async function getMsg() {
             console.log(err)
             return
         })
-    await http.get('./groups')
+    await http.get('./groups/')
         .then((res) => {
             msg.value.ddlGroups = res.groups.map(i => {
                 return {
