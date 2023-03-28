@@ -83,14 +83,14 @@ export const pushEditData = async (input) => {
 const getLoginInfo = async () => {
     await http.get('./login_info/')
         .then((res) => {
-            if (res.QQinfo.user_id === undefined) {
+            if (res.data.QQinfo.user_id === undefined) {
                 return [{ data: null, status: false }, { data: null, status: false }]
             }
-            else if (res.MsUserInfo.userPrincipalName === undefined) {
-                return [{ data: res.QQinfo.user_id, status: true }, { data: res.MsUserInfo.LoginMSURL, status: false }]
+            else if (res.data.MsUserInfo.userPrincipalName === undefined) {
+                return [{ data: res.data.QQinfo.user_id, status: true }, { data: res.data.MsUserInfo.LoginMSURL, status: false }]
             }
             else {
-                return [{ data: res.QQinfo.user_id, status: true }, { data: res.MsUserInfo.userPrincipalName, status: true }]
+                return [{ data: res.data.QQinfo.user_id, status: true }, { data: res.data.MsUserInfo.userPrincipalName, status: true }]
             }
         })
         .catch((err) => {
@@ -221,7 +221,7 @@ export async function getMsg() {
     const msg = ref()
     await http.get('./ddls/')
         .then((res) => {
-            msg.value.ddl = res.DDL.map(i => {
+            msg.value.ddl = res.data.DDL.map(i => {
                 return {
                     id: i.id,
                     ddlContent: i.description.slice(0, 10) + "...",
@@ -238,7 +238,7 @@ export async function getMsg() {
         })
     await http.get('./groups/')
         .then((res) => {
-            msg.value.ddlGroups = res.map(i => {
+            msg.value.ddlGroups = res.data.map(i => {
                 return {
                     groupName: i.group_name,
                     status: i.is_active,
