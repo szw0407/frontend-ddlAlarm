@@ -24,12 +24,12 @@ export const openCell = ref(null)  //mycale
 
 
 export const msOutLookAccout = ref(null)
-export const msOutLookStatus = ref(true)
-export const msSynchronousStatus = ref(true)
+export const msOutLookStatus = ref(false)
+export const msSynchronousStatus = ref(false)
 export const msAliagnStatus = ref(false)
 export const msLoginLink = ref('https://hao123.com')
 
 
 export const showWindowData = ref({});
-export const editWindowData = ref({ date: null, ddlContent: null, rank: null });
-export const inputEditData = ref({ date: null, ddlContent: null, rank: null });
+export const editWindowData = ref({ date: null, ddlContent: null, rank: null })
+export const inputEditData = ref({ date: null, ddlContent: null, rank: null })

@@ -44,7 +44,6 @@ async function confirmEdit() {
   if (JSON.stringify(inputEditData.value) === JSON.stringify(editWindowData.value)) {
     loading.close();
   } else {
-    console.log(inputEditData.value);
     await pushEditData(inputEditData.value)
     .catch((err) => {
       console.error(err);
@@ -91,10 +90,9 @@ function signout() {
 
 
 refresh()
-console.log("sdad",tableData.value)
 
 watch(refreshStatus, () => {
-    refresh();
+    refresh()
 })
 
 </script>

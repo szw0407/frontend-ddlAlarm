@@ -47,7 +47,6 @@ function confrimGroupSettings() {
     if (groups.value === settingWindowData.value) {
         loading.close()
     } else {
-        console.log(settingWindowData.value)
         pushSettingData(settingWindowData.value)
             .catch(() => {
                 ElMessageBox.alert("群聊抓取状态设定失败！", "设定失败", {
@@ -78,7 +77,6 @@ function confrimGroupSettings() {
 
 onMounted(() => {
     getOneWords()
-    console.log(userAvatar.value)
 })
 </script>
 

@@ -1,13 +1,13 @@
-<script setup>
-import { defineProps } from "vue";
-import { ElMessageBox, ElLoading } from "element-plus";
+<script setup> 
+import { defineProps } from "vue"
+import { ElMessageBox, ElLoading } from "element-plus"
 
 import { showWindowVisible, editWindowVisible,inputEditData,
-         showWindowData,editWindowData, tableData, TipMsg, refreshStatus } from "../share/data";
+         showWindowData,editWindowData, tableData, TipMsg, refreshStatus } from "../share/data"
 
 import { pushDelete } from "../share/api"
 
-const prop = defineProps(["index"]);
+const prop = defineProps(["index"])
 
 
 function showItem(index) {
@@ -16,15 +16,15 @@ function showItem(index) {
 }
 
 function editItem(index) {
-  const item = tableData.value.ddl[index];
+  const item = tableData.value.ddl[index]
   if (!item) {
-    console.error(`Invalid index: ${index}`);
+    console.error(`Invalid index: ${index}`)
     return
   }
 
-  inputEditData.value = { ...item };
-  editWindowData.value = { ...item };
-  editWindowVisible.value = true;
+  inputEditData.value = { ...item }
+  editWindowData.value = { ...item }
+  editWindowVisible.value = true
 }
 
 function deleteItem(index) {
@@ -40,7 +40,7 @@ function deleteItem(index) {
     pushDelete(index)
     refreshStatus.value = true
     loading.close()
-  });
+  })
 }
 </script>
 

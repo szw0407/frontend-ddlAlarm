@@ -37,34 +37,31 @@ class day {
 // 生成日序列
 function* generateDays(start, end) {
   for (let currentDate = new Date(start); currentDate <= end; currentDate.setDate(currentDate.getDate() + 1)) {
-    yield new day(new Date(currentDate.getTime()));
+    yield new day(new Date(currentDate.getTime()))
   }
 }
 
 // 加白
 function addWhite() {
-  tempDays = [];
-  showingDays.value = [];
-  tempDays = (days.value.filter(day => day.month === showingMonth.value));
-  const tempFrontDay = new Date(tempDays[0].date);
-  const tempBackDay = new Date(tempDays[tempDays.length - 1].date);
-  const frontWhite = [];
-  const backWhite = [];
+  tempDays = []
+  showingDays.value = []
+  tempDays = (days.value.filter(day => day.month === showingMonth.value))
+  const tempFrontDay = new Date(tempDays[0].date)
+  const tempBackDay = new Date(tempDays[tempDays.length - 1].date)
+  const frontWhite = []
+  const backWhite = []
 
   // 添加前置白天
   if (tempDays[0].weekRank) {
     for (let i = 1; i <= 7; i++) {
-      let temp = new Date(tempFrontDay.getTime());
-      console.log("First Day Is :", tempFrontDay.getMonth(), "月", tempFrontDay.getDate(), "日")
-      console.log("Final Day Is :", tempBackDay.getMonth(), "月", tempBackDay.getDate(), "日")
+      let temp = new Date(tempFrontDay.getTime())
       temp.setDate(temp.getDate() - i)
       if (temp.getDay() !== 0) {
-        console.log(temp.getDate(), " is No.", temp.getDay())
-        frontWhite.unshift((new day(temp)));
+        frontWhite.unshift((new day(temp)))
       }
       else {
-        frontWhite.unshift((new day(temp)));
-        break;
+        frontWhite.unshift((new day(temp)))
+        break
       }
     }
   }
@@ -72,20 +69,20 @@ function addWhite() {
   // 添加后置白天
   if (tempDays[tempDays.length - 1].weekRank !== 6) {
     for (let i = 1; i <= 7; i++) {
-      let temp = new Date(tempBackDay.getTime());
+      let temp = new Date(tempBackDay.getTime())
       temp.setDate(temp.getDate() + i)
       if (temp.getDay() !== 6) {
-        backWhite.push((new day(temp)));
+        backWhite.push((new day(temp)))
       }
       else {
-        backWhite.push((new day(temp)));
-        break;
+        backWhite.push((new day(temp)))
+        break
       }
 
     }
   }
 
-  showingDays.value = [...frontWhite, ...tempDays, ...backWhite];
+  showingDays.value = [...frontWhite, ...tempDays, ...backWhite]
 }
 
 // 切换到上个月
@@ -94,7 +91,7 @@ function toBeforeMonth() {
     console.warn("Impermissible Behavior.")
   }
   else {
-    showingMonth.value--;
+    showingMonth.value--
   }
 }
 
@@ -104,7 +101,7 @@ function toNextMonth() {
     console.warn("Impermissible Behavior.")
   }
   else {
-    showingMonth.value++;
+    showingMonth.value++
   }
 }
 
@@ -113,7 +110,7 @@ function toNextMonth() {
 days.value = [...generateDays(
   new Date(new Date().setMonth(new Date().getMonth() - 2)).setDate(1),
   new Date(new Date().setMonth(new Date().getMonth() + 2)).setDate(0)
-)];
+)]
 
 // 向日序列内植入信息
 for (let tableDataIndex in tableData.value.ddl) {
@@ -125,18 +122,17 @@ for (let tableDataIndex in tableData.value.ddl) {
   let tempDate = dateToFind.getDate()
   index = days.value.findIndex((day) => day.month === tempMonth && day.day === tempDate)
   days.value[index].index.push(Number(tableDataIndex))
-  console.log(days)
 
   // 根据紧急等级植入颜色
   switch (rank2Class.value[tableData.value.ddl[tableDataIndex].rank]) {
-    case "red": days.value[index].color = "red";
-      break;
+    case "red": days.value[index].color = "red"
+      break
     case "yellow": if (days.value[index].color !== "red") {
-      days.value[index].color = "yellow";
+      days.value[index].color = "yellow"
     }
-      break;
+      break
     case "green": if (days.value[index].color === "white") {
-      days.value[index].color = "green";
+      days.value[index].color = "green"
     }
   }
 
@@ -164,12 +160,12 @@ watch(showingMonth, addWhite)
       <el-button style="margin: 40px;right: 260px;position: absolute;top: 70px;" size="large">纵览</el-button>
     </template>
     <div style="width:584px;margin-block:80px;background-color: white;">
-      <div>
+      <div style="margin-bottom: 2%;">
+        <div :class="CalendarCell" @click="toBeforeMonth" style="display: inline-block;margin-left: 38%;margin-right: 5%;">&lt;</div>
         <p style="display: inline-block;">{{ showingMonth + 1 }}</p>
-        <div :class="CalendarCell" @click="toBeforeMonth" style="display: inline-block;">&lt;</div>
-        <div :class="CalendarCell" @click="toNextMonth" style="display: inline-block;">></div>
+        <div :class="CalendarCell" @click="toNextMonth" style="display: inline-block;margin-left: 5%;">></div>
       </div>
-      <div style="height:80px;width:80px;display: inline-block;" v-for="i in weekDayArr">{{ i }}</div>
+      <div style="height:80px;width:80px;display: inline-block;text-align: center;" v-for="i in weekDayArr">{{ i }}</div>
       <CalendarCell v-for="day in showingDays" :day="day"></CalendarCell>
     </div>
   </el-popover>

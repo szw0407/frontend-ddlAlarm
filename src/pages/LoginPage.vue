@@ -1,15 +1,8 @@
 <script setup>
-import { ref } from "vue"
-
 import { login } from "../share/api"
 import { TipMsg } from "../share/data"; 
 
 const emit = defineEmits(["login-status-changed"])
-
-const account = ref(null)
-const password = ref(null)
-
-
 
 async function loginTry() {
   const loading = ElLoading.service({
