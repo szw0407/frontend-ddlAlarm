@@ -238,7 +238,7 @@ export async function getMsg() {
         })
     await http.get('./groups/')
         .then((res) => {
-            msg.value.ddlGroups = res.groups.map(i => {
+            msg.value.ddlGroups = res.map(i => {
                 return {
                     groupName: i.group_name,
                     status: i.is_active,
