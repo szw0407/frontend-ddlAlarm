@@ -3,14 +3,12 @@ import { watch, ref } from "vue"
 
 import CalendarCell from "./CalendarCell.vue"
 
-import { tableData } from "../share/data"
-import { rank2Class } from "../share/api"
+import { days } from "../share/data"
 
 
 const weekDayArr = ref(["日", "一", "二", "三", "四", "五", "六"])
 
 
-const days = ref([])
 const TodayMonth = (new Date).getMonth()
 const showingMonth = ref(0)
 const showingDays = ref([])   // showDays即单页展示的日子
@@ -111,40 +109,6 @@ days.value = [...generateDays(
   new Date(new Date().setMonth(new Date().getMonth() - 2)).setDate(1),
   new Date(new Date().setMonth(new Date().getMonth() + 2)).setDate(0)
 )]
-
-// 向日序列内植入信息
-for (let tableDataIndex in tableData.value.ddl) {
-
-  // 找对应的index
-  const dateToFind = new Date(tableData.value.ddl[Number(tableDataIndex)].date);
-  let index = 1
-  let tempMonth = dateToFind.getMonth()
-  let tempDate = dateToFind.getDate()
-  index = days.value.findIndex((day) => day.month === tempMonth && day.day === tempDate)
-  days.value[index].index.push(Number(tableDataIndex))
-
-  // 根据紧急等级植入颜色
-  switch (rank2Class.value[tableData.value.ddl[tableDataIndex].rank]) {
-    case "red": days.value[index].color = "red"
-      break
-    case "yellow": if (days.value[index].color !== "red") {
-      days.value[index].color = "yellow"
-    }
-      break
-    case "green": if (days.value[index].color === "white") {
-      days.value[index].color = "green"
-    }
-  }
-
-  // 植入完整内容
-  days.value[index].show.push({
-    "ddlContent": tableData.value.ddl[tableDataIndex].ddlContent,
-    "group": tableData.value.ddl[tableDataIndex].group,
-    "rank": tableData.value.ddl[tableDataIndex].rank
-  })
-
-}
-
 
 // 初始加白
 addWhite()

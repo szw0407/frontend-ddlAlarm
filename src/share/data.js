@@ -33,3 +33,5 @@ export const msLoginLink = ref('https://hao123.com')
 export const showWindowData = ref({});
 export const editWindowData = ref({ date: null, ddlContent: null, rank: null })
 export const inputEditData = ref({ date: null, ddlContent: null, rank: null })
+
+export const days = ref([])

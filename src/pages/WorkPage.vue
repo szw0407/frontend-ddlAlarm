@@ -11,7 +11,12 @@ import {
     msAliagnStatus, msOutLookStatus, refreshStatus
 } from "../share/data"
 
-import { pushEditData, getMsg, rank2Class, } from "../share/api"
+import { pushEditData, rank2Class, } from "../share/api"
+import { calendar } from "../share/Calendar"
+import { getMsg } from "../share/api"
+
+
+//import { getMsg } from "../test/api"
 
 const emit = defineEmits(["login-status-changed"])
 
@@ -33,6 +38,7 @@ async function refresh() {
     if (!!data) {
         loading.close()
         tableData.value = data
+        calendar()
         refreshStatus.value = false
     } else {
         loading.close()
@@ -94,6 +100,10 @@ function signout() {
 }
 
 
+function test1(a){
+    console.log(a)
+    return a.split("T")[0]
+}
 
 refresh()
 
@@ -155,7 +165,7 @@ watch(refreshStatus, () => {
             <el-table-column label="截止时间" width="180">
                 <template #default="scope">
                     <div style="display:flex;align-items: center;" :style="{ backgroundColor: rank2Class[scope.row.rank] }">
-                        <span style="margin-left: 10px;">{{ scope.row.date.split("T")[0] }}</span>
+                        <span style="margin-left: 10px;">{{ test1(scope.row.date) }}</span>
                     </div>
                 </template>
             </el-table-column>

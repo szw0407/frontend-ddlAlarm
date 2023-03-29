@@ -16,7 +16,7 @@ const userAvatar = computed(() => {
 const msOutLookSettingVisible = ref(false)
 const visionVisible = ref(false)
 const groups = ref()
-const settingWindowData = ref(groups)
+const settingWindowData = ref()
 const groupSettingWindowVisible = ref(false)
 const oneWord = ref("one word get wrong.")
 
@@ -49,13 +49,6 @@ function confrimGroupSettings() {
         loading.close()
     } else {
         pushSettingData(settingWindowData.value)
-            .catch(() => {
-                ElMessageBox.alert("群聊抓取状态设定失败！", "设定失败", {
-                    confirmButtonText: "确定",
-                    type: "error",
-                })
-                loading.close()
-            })
             .then(() => {
                 ElMessageBox.confirm(
                     "群聊抓取状态设定成功！",
@@ -68,6 +61,14 @@ function confrimGroupSettings() {
                 )
                 emits("refreshOn")
             })
+            .catch(() => {
+                ElMessageBox.alert("群聊抓取状态设定失败！", "设定失败", {
+                    confirmButtonText: "确定",
+                    type: "error",
+                })
+                loading.close()
+            })
+
             .finally(() => {
                 loading.close()
             })
@@ -76,11 +77,11 @@ function confrimGroupSettings() {
     groupSettingWindowVisible.value = false
 }
 
-function openGroupsSetting () {
+function openGroupsSetting() {
     console.log(tableData.value)
     groups.value = tableData.value.ddlGroups
+    settingWindowData.value = JSON.parse(JSON.stringify(groups.value))
     groupSettingWindowVisible.value = true
-    console.log(tableData.value)
 }
 
 onMounted(() => {
@@ -121,7 +122,7 @@ onMounted(() => {
     <el-dialog v-model="groupSettingWindowVisible" :show-close="false" align-center title="抓取群聊设定">
         <div>
             <p>选择群聊：</p>
-            <div v-for="group in groups">
+            <div v-for="group in settingWindowData">
                 <el-checkbox v-model="group.status">{{ group.groupName }}</el-checkbox>
             </div>
         </div>

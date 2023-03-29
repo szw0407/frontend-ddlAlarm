@@ -31,6 +31,7 @@ function clickEvent(number) {
     }
 }
 
+
 </script>
 
 <template>
