@@ -20,22 +20,22 @@ export const addRankAtrr = (obj) => {
 
     let rank = null
 
-    if (distance < hurryVeryNum * dayDistance) {
+    if(distance < 0){
+        rank = "过期"
+    } else if (distance < hurryVeryNum * dayDistance) {
         rank = "非常紧急"
     } else if (distance < hurryNum * dayDistance) {
         rank = "紧急"
     } else if (distance < easyNum * dayDistance) {
         rank = "不紧急"
-    } else {
-        rank = "不紧急"
+    } else if (distance ){
+        rank = "超限"
     }
 
     obj.forEach(element => {
-        console.log("before:", element)
         if (element.rank === '') {
             element.rank = rank
         }
-        console.log("after:", element)
     });
 }
 
@@ -46,17 +46,13 @@ export const pushDelete = async (index) => {
                 "id": tableData.value.ddl[index].id
             }
         })
-        .then(() => {
-            console.log("delete ok")
-        })
         .catch((err) => {
-            console.log(err)
+            console.warn(err)
         })
 
 }
 
 export const pushSettingData = async (setting) => {
-    console.log(setting)
     let msg = setting.map(i => {
         return {
             group_number: i.group_number,
@@ -64,7 +60,6 @@ export const pushSettingData = async (setting) => {
             is_active: i.status,
         }
     })
-    console.log(msg)
     await http.put('./group', msg,)
 }
 
@@ -207,7 +202,7 @@ export async function msAliagn() {
 
         })
             .catch((err) => {
-                console.log(err)
+                console.warn(err)
                 loading.close()
                 alert("同步失败，请重试！")
                 return
@@ -249,7 +244,7 @@ export async function getMsg() {
         })
         .catch((err) => {
             alert("未知错误，请重试！")
-            console.log(err)
+            console.warn(err)
             return
         })
     await http.get('./groups/')
@@ -265,7 +260,7 @@ export async function getMsg() {
             })
         })
         .catch((err) => {
-            console.log(err)
+            console.warn(err)
         })
 
     addRankAtrr(msg.value.ddl)

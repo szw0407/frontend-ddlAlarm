@@ -11,7 +11,9 @@ const prop = defineProps(["index"])
 
 
 function showItem(index) {
-  showWindowData.value = tableData.value.ddl[index]
+  const { rank, ddlContent, src, date, group } = tableData.value.ddl[index]
+  showWindowData.value = { rank, ddlContent, src, date, group }
+  showWindowData.value.date = showWindowData.value.date.slice(0, 10)
   showWindowVisible.value = true
 }
 

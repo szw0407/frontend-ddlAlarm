@@ -1,6 +1,7 @@
 import { ref } from 'vue'
 
 import { addRankAtrr } from '../share/api'
+import { tableData } from '../share/data'
 
 export async function getMsg() {
 
@@ -61,3 +62,8 @@ export async function getMsg() {
     addRankAtrr(msg.value.ddl)
     return msg.value
 }
+
+export const pushEditData = async (input) => {
+    tableData.value.ddl.push(input)
+}
+

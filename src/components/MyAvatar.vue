@@ -78,7 +78,6 @@ function confrimGroupSettings() {
 }
 
 function openGroupsSetting() {
-    console.log(tableData.value)
     groups.value = tableData.value.ddlGroups
     settingWindowData.value = JSON.parse(JSON.stringify(groups.value))
     groupSettingWindowVisible.value = true

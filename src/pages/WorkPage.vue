@@ -11,12 +11,12 @@ import {
     msAliagnStatus, msOutLookStatus, refreshStatus
 } from "../share/data"
 
-import { pushEditData, rank2Class, } from "../share/api"
+import { rank2Class, } from "../share/api"
 import { calendar } from "../share/Calendar"
-import { getMsg } from "../share/api"
+import { pushEditData, getMsg } from "../share/api"
 
 
-//import { getMsg } from "../test/api"
+//import { pushEditData,getMsg } from "../test/api"
 
 const emit = defineEmits(["login-status-changed"])
 
@@ -47,21 +47,21 @@ async function refresh() {
 }
 
 async function confirmEdit() {
-    const loading = ElLoading.service({
-        fullscreen: true,
-        text: TipMsg.value[3],
-    })
     if (JSON.stringify(inputEditData.value) === JSON.stringify(editWindowData.value)) {
-        loading.close();
     } else {
+        const loading = ElLoading.service({
+            fullscreen: true,
+            text: TipMsg.value[3],
+        })
         await pushEditData(inputEditData.value)
             .then(() => {
+                refreshStatus.value = true
+                loading.close()
                 ElMessageBox.confirm(TipMsg.value[4], "修改成功！", {
                     confirmButtonText: "确定",
                     cancelButtonText: "取消",
                     type: "warning",
                 })
-                refreshStatus.value = true
             })
             .catch((err) => {
                 console.error(err);
@@ -69,10 +69,8 @@ async function confirmEdit() {
                     confirmButtonText: "确定",
                     type: "error",
                 })
-                loading.close()
             })
 
-        loading.close()
     }
     editWindowVisible.value = false;
 }
@@ -100,8 +98,7 @@ function signout() {
 }
 
 
-function test1(a){
-    console.log(a)
+function test1(a) {
     return a.split("T")[0]
 }
 

@@ -11,6 +11,9 @@ export const calendar = () => {
     let tempMonth = dateToFind.getMonth()
     let tempDate = dateToFind.getDate()
     index = days.value.findIndex((day) => day.month === tempMonth && day.day === tempDate)
+    if (index === -1) {
+      continue
+    }
     days.value[index].index.push(Number(tableDataIndex))
 
     // 根据紧急等级植入颜色
